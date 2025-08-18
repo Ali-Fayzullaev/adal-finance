@@ -76,8 +76,8 @@ type PaletteKey = keyof typeof palettes;
 
 // WhatsApp номера (замените Актау на реальный)
 const WA_NUMBERS = {
-  shymkent: "77071058031",
-  aktau: "77751101800",
+  shymkent: "77089810031",
+  aktau: "77773058803",
 };
 
 const makeWaLink = (phone: string, text: string) =>
@@ -937,7 +937,7 @@ export default function AdalFinanceLanding() {
               href="tel:+77071058031"
               className="inline-flex items-center gap-2 hover:text-blue-500"
             >
-              <Phone className="h-4 w-4" /> +7 707 105 80 31
+              <Phone className="h-4 w-4" /> +7 708 981 0031
             </a>
             <a
               href="https://www.instagram.com/adal_finance"
@@ -967,7 +967,7 @@ export default function AdalFinanceLanding() {
               Выберите ваш город и напишите нам:
             </p>
             <a
-              href="https://wa.me/77071058031"
+              href="https://wa.me/77089810031"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-medium shadow-sm"
@@ -976,7 +976,7 @@ export default function AdalFinanceLanding() {
               <Phone className="h-4 w-4" /> WhatsApp Шымкент
             </a>
             <a
-              href="https://wa.me/7707689779"
+              href="https://wa.me/77773058803"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-medium shadow-sm"
