@@ -38,8 +38,9 @@ import {
   SheetDescription,
 } from "@/components/ui/sheet";
 
+import CopyrightNotice from "@/components/CopyrightNotice";
 const LOGO_SRC = "/logo.png"; // замените на реальный путь
-const NIGHT = "#1d1c1c"; 
+const NIGHT = "#1d1c1c";
 
 // —— Цветовые пресеты ——
 const palettes = {
@@ -117,7 +118,7 @@ const testimonials = [
     author: "Жанна, Актау",
   },
   {
-    text: "Помогли оформить займ под залог, всё объяснили простым языком. Помогли оформить займ под залог, всё объяснили простым языком. Помогли оформить займ под залог, всё объяснили простым языком.",
+    text: "Помогли оформить займ под залог, всё объяснили простым языком.",
     author: "Жанна, Актау",
   },
   {
@@ -192,8 +193,7 @@ export default function AdalFinanceLanding() {
         className="sticky top-0 z-40 border-b backdrop-blur"
         style={{
           borderColor: p.border,
-          background:
-            theme === "dark" ? NIGHT : "rgba(255,255,255,0.7)",
+          background: theme === "dark" ? NIGHT : "rgba(255,255,255,0.7)",
         }}
       >
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
@@ -988,12 +988,8 @@ export default function AdalFinanceLanding() {
         </div>
 
         {/* копирайт */}
-        <div
-          className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 mt-8 text-xs text-center"
-          style={{ color: theme === "dark" ? "#E8EEF9" : "#51637A" }}
-        >
-          © {new Date().getFullYear()} ADAL Finance. Все права защищены.
-        </div>
+        {/* где вызываешь компонент */}
+        <CopyrightNotice theme={theme === "dark" ? "dark" : "light"} p={p} />
       </footer>
     </div>
   );
