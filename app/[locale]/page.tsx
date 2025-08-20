@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useEffect, useRef } from "react";
+import { useMemo, useState } from "react";
 import {
   Instagram,
   MessageSquare,
@@ -11,17 +11,13 @@ import {
   FileCheck,
   MapPin,
   Phone,
-  ArrowRight,
   Quote,
-  Menu,
   ListChecks,
   CheckCircle2,
   Mail,
   Navigation,
   Clock,
-  MessageCircle,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Accordion,
@@ -29,13 +25,14 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-
-import CopyrightNotice from "@/components/CopyrightNotice";
-import Hero from "@/app/components/Hero";
-import { palettes, type PaletteKey } from "./theme";
-
-// ваши константы
-const LOGO_SRC = "/logo.png";
+import { useTranslations, useLocale } from "next-intl"; // ✅ КЛИЕНТСКИЙ хук
+import Image from "next/image";
+import CopyrightNotice from "@/app/[locale]/components/CopyrightNotice";
+import Hero from "@/app/[locale]/components/Hero";
+import { palettes, type PaletteKey } from "../theme";
+import logo from "@/public/logo.png";
+import LocaleSwitcher from "@/app/[locale]/components/LocaleSwitcher";
+import MobileMenu from "./components/MobileMenu";
 const NIGHT = "#1d1c1c";
 
 const WA_NUMBERS = {
@@ -46,106 +43,88 @@ const WA_NUMBERS = {
 const makeWaLink = (phone: string, text: string) =>
   `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
 
-const badges = [
-  { Icon: Timer, text: "Решение за 30 минут" },
-  { Icon: Percent, text: "Минимальная ставка" },
-  { Icon: FileCheck, text: "Минимум документов" },
-];
-
 export default function AdalFinanceLanding() {
-  // ===== общий state темы и города (один источник правды) =====
+  const t = useTranslations(); // или useTranslations('landing') если у вас namespace
 
+  // ===== общий state темы и города =====
   const [city, setCity] = useState<"shymkent" | "aktau">("shymkent");
   const [reviewIndex, setReviewIndex] = useState(0);
   const [theme, setTheme] = useState<PaletteKey>("gold");
 
-  const ru =
-    "Здравствуйте! Хочу получить бесплатную консультацию по ADAL Finance.";
-  const waText = ru;
+  // ✅ локализуем шаблон WhatsApp
+  const waText = t("waText", {
+    default:
+      "Здравствуйте! Хочу получить бесплатную консультацию по ADAL Finance.",
+  });
+  const locale = useLocale();
+  const mapLang = locale === "kk" ? "kk" : "ru";
   const phone = city === "shymkent" ? WA_NUMBERS.shymkent : WA_NUMBERS.aktau;
   const waHref = makeWaLink(phone, waText);
 
   const p = useMemo(() => palettes[theme], [theme]);
-  const accentText = theme === "dark" ? "#041E41" : "#ffffff";
 
-  const services = [
-    {
-      Icon: ShieldCheck,
-      title: "Залоговый кредит",
-      desc: "Сумма до 100 млн ₸. Прозрачные условия и сопровождение на каждом этапе.",
-    },
-    {
-      Icon: Building2,
-      title: "Кредит для ИП",
-      desc: "Оформление до 25 млн ₸ для действующих ИП. Быстрое решение, минимум бумаг.",
-    },
-    {
-      Icon: MessageSquare,
-      title: "Консалтинг",
-      desc: "Подбор банка с лучшими ставками и защитой от скрытых платежей.",
-    },
-  ];
+  // === ЛОКАЛИЗОВАННЫЕ МАССИВЫ — внутри компонента, после t() ===
+  const badges = useMemo(
+    () => [
+      { Icon: Timer, text: t("badges.0.text") },
+      { Icon: Percent, text: t("badges.1.text") },
+      { Icon: FileCheck, text: t("badges.2.text") },
+    ],
+    [t]
+  );
 
-  const testimonials = [
-    {
-      text: "Получил одобрение быстрее, чем ожидал. Условия честные, команда всегда на связи.",
-      author: "Ермек, Шымкент",
-    },
-    {
-      text: "Помогли оформить займ под залог, всё объяснили простым языком.",
-      author: "Жанна, Актау",
-    },
-    {
-      text: "Помогли оформить займ под залог, всё объяснили простым языком.",
-      author: "Жанна, Актау",
-    },
-    {
-      text: "Помогли оформить займ под залог, всё объяснили простым языком.",
-      author: "Жанна, Актау",
-    },
-  ];
+  const services = useMemo(
+    () => [
+      {
+        Icon: ShieldCheck,
+        title: t("services.0.title"),
+        desc: t("services.0.desc"),
+      },
+      {
+        Icon: Building2,
+        title: t("services.1.title"),
+        desc: t("services.1.desc"),
+      },
+      {
+        Icon: MessageSquare,
+        title: t("services.2.title"),
+        desc: t("services.2.desc"),
+      },
+    ],
+    [t]
+  );
 
-  const faqs = [
-    {
-      q: "Вы работаете онлайн?",
-      a: "Рассмотрение и оформление — в офисе. Онлайн не рассматриваем.",
-    },
-    {
-      q: "Какие суммы доступны?",
-      a: "Без залога — до 25 млн ₸ (для ИП). Под залог — до 100 млн ₸.",
-    },
-    {
-      q: "Сколько времени занимает?",
-      a: "Первичное решение обычно в течение 30 минут при наличии необходимых данных.",
-    },
-    {
-      q: "Где вы находитесь?",
-      a: "Шымкент, Ерімбетова 59. По Актау — уточняйте в WhatsApp.",
-    },
-  ];
+  const testimonials = useMemo(
+    () => [
+      { text: t("testimonials.0.text"), author: t("testimonials.0.author") },
+      { text: t("testimonials.1.text"), author: t("testimonials.1.author") },
+    ],
+    [t]
+  );
 
-  const steps = [
-    {
-      Icon: ListChecks,
-      title: "Заявка",
-      desc: "Пишете нам в WhatsApp: цель, сумма, срок.",
-    },
-    {
-      Icon: FileCheck,
-      title: "Документы",
-      desc: "Присылаете базовый пакет, мы проверяем и подбираем банк.",
-    },
-    {
-      Icon: Timer,
-      title: "Решение",
-      desc: "Предварительное одобрение обычно в день обращения.",
-    },
-    {
-      Icon: CheckCircle2,
-      title: "Оформление",
-      desc: "Встреча в офисе и выдача средств.",
-    },
-  ];
+  const faqs = useMemo(
+    () => [
+      { q: t("faqs.0.q"), a: t("faqs.0.a") },
+      { q: t("faqs.1.q"), a: t("faqs.1.a") },
+      { q: t("faqs.2.q"), a: t("faqs.2.a") },
+      { q: t("faqs.3.q"), a: t("faqs.3.a") },
+    ],
+    [t]
+  );
+
+  const steps = useMemo(
+    () => [
+      { Icon: ListChecks, title: t("steps.0.title"), desc: t("steps.0.desc") },
+      { Icon: FileCheck, title: t("steps.1.title"), desc: t("steps.1.desc") },
+      { Icon: Timer, title: t("steps.2.title"), desc: t("steps.2.desc") },
+      {
+        Icon: CheckCircle2,
+        title: t("steps.3.title"),
+        desc: t("steps.3.desc"),
+      },
+    ],
+    [t]
+  );
 
   return (
     <div
@@ -153,69 +132,89 @@ export default function AdalFinanceLanding() {
       style={{ background: p.bg, color: p.fg }}
     >
       {/* Navbar */}
-      <header
-        className="sticky top-0 z-40 border-b backdrop-blur"
-        style={{
-          borderColor: p.border,
-          background: theme === "dark" ? NIGHT : "rgba(255,255,255,0.7)",
-        }}
-      >
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between py-3">
-            <div className="flex items-center gap-3">
-              <img
-                src={LOGO_SRC}
-                alt="logo"
-                className="h-8 w-8 rounded-full object-cover"
-                style={{ boxShadow: `0 0 0 1px ${p.border}` }}
+<header
+  className="sticky top-0 z-40 border-b backdrop-blur"
+  style={{
+    borderColor: p.border,
+    background: theme === "dark" ? NIGHT : "rgba(255,255,255,0.7)",
+  }}
+>
+  <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+    <div className="flex items-center justify-between py-3">
+      {/* слева — логотип */}
+      <div className="flex items-center gap-3">
+        <Image
+          src={logo}
+          alt="logo"
+          width={50}
+          height={50}
+          className="h-8 w-8 rounded-full object-cover"
+          style={{ boxShadow: `0 0 0 1px ${p.border}` }}
+        />
+        <span className="text-sm sm:text-base font-semibold tracking-widest">
+          ADAL FINANCE
+        </span>
+      </div>
+
+      {/* справа: на мобилке — язык + гамбургер; на десктопе — язык + навигация + палитры */}
+      <div className="flex items-center gap-2">
+        {/* язык виден на всех экранах */}
+        <LocaleSwitcher p={p} />
+
+        {/* десктопная навигация */}
+        <nav className="hidden md:flex items-center gap-6 text-sm opacity-90">
+          <a href="#services" className="hover:opacity-100">
+            {t("nav.services", { default: "Услуги" })}
+          </a>
+          <a href="#process" className="hover:opacity-100">
+            {t("nav.process", { default: "Как мы работаем" })}
+          </a>
+          <a href="#reviews" className="hover:opacity-100">
+            {t("nav.reviews", { default: "Отзывы" })}
+          </a>
+          <a href="#faq" className="hover:opacity-100">
+            FAQ
+          </a>
+          <a href="#contacts" className="hover:opacity-100">
+            {t("nav.contacts", { default: "Контакты" })}
+          </a>
+
+          {/* палитры только на lg+ */}
+          <div className="hidden lg:flex items-center gap-2">
+            {(Object.keys(palettes) as PaletteKey[]).map((key) => (
+              <button
+                key={key}
+                onClick={() => setTheme(key)}
+                className="h-6 w-6 rounded-full border"
+                style={{
+                  background: palettes[key].bg,
+                  borderColor: p.border,
+                  boxShadow: theme === key ? `0 0 0 2px ${p.accent}` : "none",
+                }}
+                aria-label={palettes[key].name}
+                title={palettes[key].name}
               />
-              <span className="text-sm sm:text-base font-semibold tracking-widest">
-                ADAL FINANCE
-              </span>
-            </div>
-
-            {/* Desktop nav (пример переключателей темы использует общий state) */}
-            <nav className="hidden md:flex items-center gap-6 text-sm opacity-90">
-              <a href="#services" className="hover:opacity-100">
-                Услуги
-              </a>
-              <a href="#process" className="hover:opacity-100">
-                Как мы работаем
-              </a>
-              <a href="#reviews" className="hover:opacity-100">
-                Отзывы
-              </a>
-              <a href="#faq" className="hover:opacity-100">
-                FAQ
-              </a>
-              <a href="#contacts" className="hover:opacity-100">
-                Контакты
-              </a>
-              <div className="hidden lg:flex items-center gap-2">
-                {(Object.keys(palettes) as PaletteKey[]).map((key) => (
-                  <button
-                    key={key}
-                    onClick={() => setTheme(key)}
-                    className="h-6 w-6 rounded-full border"
-                    style={{
-                      background: palettes[key].bg,
-                      borderColor: p.border,
-                      boxShadow:
-                        theme === key ? `0 0 0 2px ${p.accent}` : "none",
-                    }}
-                    aria-label={palettes[key].name}
-                    title={palettes[key].name}
-                  />
-                ))}
-              </div>
-            </nav>
-
-            {/* ...твой мобильный Sheet остаётся без изменений, просто используй setTheme(key) из этого же state */}
+            ))}
           </div>
-        </div>
-      </header>
+        </nav>
 
-      {/* ===== Hero вынесен в отдельный компонент ===== */}
+        {/* мобильное меню (гамбургер) */}
+        <div className="md:hidden">
+          <MobileMenu
+            t={t}
+            p={p}
+            theme={theme}
+            setTheme={setTheme}
+            palettes={palettes as any}
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+      {/* Hero */}
       <Hero
         theme={theme}
         p={p}
@@ -225,10 +224,13 @@ export default function AdalFinanceLanding() {
         badges={badges}
       />
 
+      {/* ...дальше ваш JSX без изменений, только заголовки можно тоже брать из t(...) */}
       {/* Services */}
       <section id="services" className="py-14">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-semibold">Что мы делаем</h2>
+          <h2 className="text-2xl font-semibold">
+            {t("headings.services", { default: "Что мы делаем" })}
+          </h2>
           <div className="mt-6 grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {services.map(({ Icon, title, desc }, i) => (
               <Card
@@ -267,7 +269,9 @@ export default function AdalFinanceLanding() {
       {/* Process */}
       <section id="process" className="py-14">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-semibold">Как мы работаем</h2>
+          <h2 className="text-2xl font-semibold">
+            {t("nav.process", { default: "Как мы работаем" })}
+          </h2>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {steps.map(({ Icon, title, desc }, i) => (
               <Card
@@ -313,17 +317,20 @@ export default function AdalFinanceLanding() {
       <section id="offices" className="py-14">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between gap-4">
-            <h2 className="text-2xl font-semibold">Наши офисы</h2>
+            <h2 className="text-2xl font-semibold">
+              {t("nav.offices", { default: "Наши офисы" })}
+            </h2>
             <a
               href="#contacts"
               className="text-xs hover:opacity-80"
               style={{ color: p.accent }}
             >
-              Контакты
+              {t("nav.contacts", { default: "Контакты" })}
             </a>
           </div>
+
           <div className="mt-6 grid gap-6 lg:grid-cols-2">
-            {/* Карта Шымкент */}
+            {/* Шымкент */}
             <Card
               className="rounded-2xl shadow-sm overflow-hidden"
               style={{
@@ -341,7 +348,7 @@ export default function AdalFinanceLanding() {
                         color: theme === "dark" ? "#E8EEF9" : "#42526D",
                       }}
                     >
-                      Шымкент
+                      {t("cities.shymkent", { default: "Шымкент" })}
                     </div>
                     <span className="inline-flex items-center gap-2 text-xs opacity-80">
                       <Clock
@@ -349,24 +356,29 @@ export default function AdalFinanceLanding() {
                         style={{
                           color: theme === "dark" ? "#E8EEF9" : "#42526D",
                         }}
-                      />{" "}
+                      />
                       <span
                         style={{
                           color: theme === "dark" ? "#E8EEF9" : "#42526D",
                         }}
                       >
-                        {" "}
-                        Пн–Сб 10:00–19:00
+                        {t("offices.shymkent.hours", {
+                          default: "Пн–Сб 10:00–19:00",
+                        })}
                       </span>
                     </span>
                   </div>
+
                   <div
                     className="mt-2 inline-flex items-start gap-2 text-sm"
                     style={{ color: theme === "dark" ? "#E8EEF9" : "#42526D" }}
                   >
                     <MapPin className="mt-0.5 h-4 w-4" />
-                    Улица Еримбетова, 59/7, 11 кабинет; 1 этаж
+                    {t("offices.shymkent.address", {
+                      default: "Улица Еримбетова, 59/7, 11 кабинет; 1 этаж",
+                    })}
                   </div>
+
                   <div className="mt-4 flex flex-wrap gap-2">
                     <a
                       href="https://2gis.kz/shymkent/inside/70030076950815085/firm/70000001103431806?m=69.633628%2C42.342989%2F18"
@@ -384,15 +396,16 @@ export default function AdalFinanceLanding() {
                         style={{
                           color: theme === "dark" ? "#E8EEF9" : "#42526D",
                         }}
-                      />{" "}
+                      />
                       <span
                         style={{
                           color: theme === "dark" ? "#E8EEF9" : "#42526D",
                         }}
                       >
-                        Открыть в 2ГИС
+                        {t("actions.openMap", { default: "Открыть на карте" })}
                       </span>
                     </a>
+
                     <a
                       href={makeWaLink(WA_NUMBERS.shymkent, waText)}
                       target="_blank"
@@ -400,18 +413,22 @@ export default function AdalFinanceLanding() {
                       className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm shadow-sm hover:opacity-90"
                       style={{ background: "#25D366", color: "#fff" }}
                     >
-                      <Phone className="h-4 w-4" /> WhatsApp
+                      <Phone className="h-4 w-4" />{" "}
+                      {t("actions.whatsapp", { default: "WhatsApp" })}
                     </a>
                   </div>
                 </div>
-                {/* Карта (Шымкент) */}
+
+                {/* Карта Шымкент */}
                 <div
                   className="h-56 w-full border-t"
                   style={{ borderColor: p.border }}
                 >
                   <iframe
-                    title="Карта Актау — ADAL Finance"
-                    src={`https://www.google.com/maps?hl=ru&ll=42.342989,69.633628&hl=ru&z=16&output=embed`}
+                    title={t("titles.mapShymkent", {
+                      default: "Карта Шымкент — ADAL Finance",
+                    })}
+                    src={`https://www.google.com/maps?ll=42.342989,69.633628&hl=${mapLang}&z=16&output=embed`}
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
                     className="h-full w-full border-0"
@@ -427,7 +444,7 @@ export default function AdalFinanceLanding() {
               </CardContent>
             </Card>
 
-            {/* Карта Актау */}
+            {/* Актау */}
             <Card
               className="rounded-2xl shadow-sm overflow-hidden"
               style={{
@@ -445,7 +462,7 @@ export default function AdalFinanceLanding() {
                         color: theme === "dark" ? "#E8EEF9" : "#42526D",
                       }}
                     >
-                      Актау
+                      {t("cities.aktau", { default: "Актау" })}
                     </div>
                     <span className="inline-flex items-center gap-2 text-xs opacity-80">
                       <Clock
@@ -453,17 +470,19 @@ export default function AdalFinanceLanding() {
                         style={{
                           color: theme === "dark" ? "#E8EEF9" : "#42526D",
                         }}
-                      />{" "}
+                      />
                       <span
                         style={{
                           color: theme === "dark" ? "#E8EEF9" : "#42526D",
                         }}
                       >
-                        {" "}
-                        Пн–Сб 10:00–19:00
+                        {t("offices.aktau.hours", {
+                          default: "Пн–Сб 10:00–19:00",
+                        })}
                       </span>
                     </span>
                   </div>
+
                   <div
                     className="mt-2 inline-flex items-start gap-2 text-sm"
                     style={{ color: theme === "dark" ? "#E8EEF9" : "#42526D" }}
@@ -474,8 +493,11 @@ export default function AdalFinanceLanding() {
                         color: theme === "dark" ? "#E8EEF9" : "#42526D",
                       }}
                     />
-                    14-й микрорайон, БЦ «Каспий», офис 203
+                    {t("offices.aktau.address", {
+                      default: "14-й микрорайон, БЦ «Каспий», офис 203",
+                    })}
                   </div>
+
                   <div className="mt-4 flex flex-wrap gap-2">
                     <a
                       href="https://www.google.com/maps?q=43.6481,51.1722"
@@ -493,15 +515,16 @@ export default function AdalFinanceLanding() {
                         style={{
                           color: theme === "dark" ? "#E8EEF9" : "#42526D",
                         }}
-                      />{" "}
+                      />
                       <span
                         style={{
                           color: theme === "dark" ? "#E8EEF9" : "#42526D",
                         }}
                       >
-                        Открыть в 2ГИС
+                        {t("actions.openMap", { default: "Открыть на карте" })}
                       </span>
                     </a>
+
                     <a
                       href={makeWaLink(WA_NUMBERS.aktau, waText)}
                       target="_blank"
@@ -509,18 +532,22 @@ export default function AdalFinanceLanding() {
                       className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm shadow-sm hover:opacity-90"
                       style={{ background: "#25D366", color: "#fff" }}
                     >
-                      <Phone className="h-4 w-4" /> WhatsApp
+                      <Phone className="h-4 w-4" />{" "}
+                      {t("actions.whatsapp", { default: "WhatsApp" })}
                     </a>
                   </div>
                 </div>
-                {/* Карта (Актау) */}
+
+                {/* Карта Актау */}
                 <div
                   className="h-56 w-full border-t"
                   style={{ borderColor: p.border }}
                 >
                   <iframe
-                    title="Карта Актау — ADAL Finance"
-                    src={`https://www.google.com/maps?hl=ru&ll=43.6481,51.1722&z=16&output=embed`}
+                    title={t("titles.mapAktau", {
+                      default: "Карта Актау — ADAL Finance",
+                    })}
+                    src={`https://www.google.com/maps?ll=43.6481,51.1722&hl=${mapLang}&z=16&output=embed`}
                     loading="lazy"
                     referrerPolicy="no-referrer-when-downgrade"
                     className="h-full w-full border-0"
@@ -542,7 +569,9 @@ export default function AdalFinanceLanding() {
       {/* Reviews */}
       <section id="reviews" className="py-14">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-semibold">Отзывы клиентов</h2>
+          <h2 className="text-2xl font-semibold">
+            {t("nav.reviews", { default: "Отзывы клиентов" })}
+          </h2>
 
           {/* Карусель */}
           <div className="mt-6 relative">
@@ -613,7 +642,7 @@ export default function AdalFinanceLanding() {
                 className="rounded-xl px-3 py-2 text-sm hover:opacity-90"
                 style={{ border: `1px solid ${p.border}` }}
               >
-                Предыдущий
+                {t("buttons.prev", { default: "Предыдущий" })}
               </button>
               <div className="flex items-center gap-2">
                 {testimonials.map((_, i) => (
@@ -635,7 +664,7 @@ export default function AdalFinanceLanding() {
                 className="rounded-xl px-3 py-2 text-sm hover:opacity-90"
                 style={{ border: `1px solid ${p.border}` }}
               >
-                Следующий
+                {t("buttons.next", { default: "Следующий" })}
               </button>
             </div>
           </div>
@@ -645,7 +674,9 @@ export default function AdalFinanceLanding() {
       {/* FAQ */}
       <section id="faq" className="py-14">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-semibold">Частые вопросы</h2>
+          <h2 className="text-2xl font-semibold">
+            {t("nav.faq", { default: "Частые вопросы" })}
+          </h2>
           <div
             className="mt-6 rounded-2xl p-2 sm:p-4 shadow-sm"
             style={{
@@ -685,9 +716,11 @@ export default function AdalFinanceLanding() {
           {/* Лого + реквизиты */}
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-3">
-              <img
-                src={LOGO_SRC}
+              <Image
+                src={logo}
                 alt="logo"
+                width={40}
+                height={40}
                 className="h-10 w-10 rounded-full object-cover"
                 style={{ boxShadow: `0 0 0 1px ${p.border}` }}
               />
@@ -696,8 +729,8 @@ export default function AdalFinanceLanding() {
                 <div
                   style={{ color: theme === "dark" ? "#E8EEF9" : "#51637A" }}
                 >
-                  БИН:{" "}
-                  <span className="inline-flex items-center  gap-2 hover:text-amber-500 font-bold">
+                  {t("company.binLabel", { default: "БИН" })}:{" "}
+                  <span className="inline-flex items-center gap-2 hover:text-amber-500 font-bold">
                     200140024408
                   </span>
                 </div>
@@ -707,19 +740,26 @@ export default function AdalFinanceLanding() {
               className="text-xs"
               style={{ color: theme === "dark" ? "#B8C7E0" : "#6B7A90" }}
             >
-              Мы помогаем оформить финансирование до 100 млн ₸ быстро, удобно и
-              на выгодных условиях.
+              {t("company.about", {
+                default:
+                  "Мы помогаем оформить финансирование до 100 млн ₸ быстро, удобно и на выгодных условиях.",
+              })}
             </p>
           </div>
 
           {/* Контакты */}
           <div className="flex flex-col gap-2">
-            <h3 className="font-medium text-base mb-2">Контакты</h3>
+            <h3 className="font-medium text-base mb-2">
+              {t("nav.contacts", { default: "Контакты" })}
+            </h3>
             <div className="inline-flex items-center gap-2">
-              <MapPin className="h-4 w-4" /> Ерімбетова 59, Шымкент
+              <MapPin className="h-4 w-4" />{" "}
+              {t("addresses.shymkent.short", {
+                default: "Ерімбетова 59, Шымкент",
+              })}
             </div>
             <a
-              href="tel:+77071058031"
+              href="tel:+77089810031"
               className="inline-flex items-center gap-2 hover:text-blue-500"
             >
               <Phone className="h-4 w-4" /> +7 708 981 0031
@@ -743,38 +783,50 @@ export default function AdalFinanceLanding() {
           {/* WhatsApp */}
           <div className="flex flex-col gap-3">
             <h3 className="font-medium text-base mb-2">
-              Бесплатная консультация
+              {t("cta.freeConsult", { default: "Бесплатная консультация" })}
             </h3>
-            <p
-              className="text-xs"
-              style={{ color: theme === "dark" ? "#B8C7E0" : "#6B7A90" }}
-            >
-              Выберите ваш город и напишите нам:
+            <p className="text-xs">
+              {t("cta.chooseCity", {
+                default: "Выберите ваш город и напишите нам:",
+              })}
             </p>
+
             <a
-              href="https://wa.me/77089810031"
+              href={makeWaLink(WA_NUMBERS.shymkent, waText)}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-medium shadow-sm"
               style={{ background: "#25D366", color: "white" }}
             >
-              <Phone className="h-4 w-4" /> WhatsApp Шымкент
+              <Phone className="h-4 w-4" />
+              {`${t("actionss.whatsapp", { default: "WhatsApp" })} ${t(
+                "cities.shymkent",
+                { default: "Шымкент" }
+              )}`}
             </a>
+
             <a
-              href="https://wa.me/77773058803"
+              href={makeWaLink(WA_NUMBERS.aktau, waText)}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-medium shadow-sm"
               style={{ background: "#25D366", color: "white" }}
             >
-              <Phone className="h-4 w-4" /> WhatsApp Актау
+              <Phone className="h-4 w-4" />
+              {`${t("actionss.whatsapp", { default: "WhatsApp" })} ${t(
+                "cities.aktau",
+                { default: "Актау" }
+              )}`}
             </a>
           </div>
         </div>
 
         {/* копирайт */}
-        {/* где вызываешь компонент */}
-        <CopyrightNotice theme={theme === "dark" ? "dark" : "light"} p={p} />
+        <CopyrightNotice
+          theme={theme === "dark" ? "dark" : "light"}
+          p={p}
+          autoOnce={false} // ← модалка не откроется сама
+        />
       </footer>
     </div>
   );

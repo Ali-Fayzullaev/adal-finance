@@ -1,15 +1,17 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { ArrowRight, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import type { PaletteKey, Palette } from "@/app/theme";
 import FireworksOver from "./FireworksOnce";
+import { useTranslations } from "next-intl";
+
 type Badge = {
-  Icon: React.ComponentType<{ className?: string }>;
   text: string;
+  Icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
 };
 
 interface HeroProps {
@@ -29,55 +31,79 @@ export default function Hero({
   waHref,
   badges,
 }: HeroProps) {
+  const t = useTranslations(); // при желании укажи namespace: useTranslations('hero')
   const accentText = theme === "dark" ? "#041E41" : "#ffffff";
+
   const ctaRef = useRef<HTMLDivElement>(null);
-  // анимации CTA (заметный, но не навязчивый)
   const ctaControls = useAnimation();
   const btnControls = useAnimation();
+
   const interactedRef = useRef(false);
   const markInteracted = () => {
     interactedRef.current = true;
   };
 
+  // ── запуск анимаций строго после маунта ──────────────────────────────────────
+  const [mounted, setMounted] = useState(false);
   useEffect(() => {
-    (async () => {
-      // вход
-      await ctaControls.start({
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        boxShadow: [
-          "0 12px 26px rgba(0,0,0,0.08)",
-          "0 18px 50px rgba(0,0,0,0.18)",
-        ],
-        transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
-      });
+    setMounted(true);
+  }, []);
 
-      // мягкое свечение рамки (1 раз)
-      await ctaControls.start({
-        filter: [
-          "drop-shadow(0 0 0px rgba(0,0,0,0))",
-          `drop-shadow(0 0 14px ${p.accent}55)`,
-          "drop-shadow(0 0 0px rgba(0,0,0,0))",
-        ],
-        transition: { duration: 1.2, times: [0, 0.5, 1] },
-      });
+  useEffect(() => {
+    if (!mounted) return;
 
-      // лёгкий намёк на кнопку, если пользователь ничего не сделал
-      setTimeout(() => {
-        if (
-          !interactedRef.current &&
-          !window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches
-        ) {
-          btnControls.start({
-            rotate: [0, -1.6, 1.6, -1, 0],
-            scale: [1, 1.02, 1],
-            transition: { duration: 0.7 },
-          });
-        }
-      }, 7000);
-    })();
-  }, [ctaControls, btnControls, p.accent]);
+    let rafId: number | null = null;
+    let tid: ReturnType<typeof setTimeout> | null = null;
+
+    const startAnimations = () => {
+      rafId = requestAnimationFrame(async () => {
+        // вход
+        await ctaControls.start({
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          boxShadow: [
+            "0 12px 26px rgba(0,0,0,0.08)",
+            "0 18px 50px rgba(0,0,0,0.18)",
+          ],
+          transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+        });
+
+        // мягкое свечение рамки (1 раз)
+        await ctaControls.start({
+          filter: [
+            "drop-shadow(0 0 0px rgba(0,0,0,0))",
+            `drop-shadow(0 0 14px ${p.accent}55)`,
+            "drop-shadow(0 0 0px rgba(0,0,0,0))",
+          ],
+          transition: { duration: 1.2, times: [0, 0.5, 1] },
+        });
+
+        // лёгкий намёк на кнопку, если пользователь ничего не сделал
+        tid = setTimeout(() => {
+          const prefersReduced = window.matchMedia?.(
+            "(prefers-reduced-motion: reduce)"
+          )?.matches;
+          if (!interactedRef.current && !prefersReduced) {
+            btnControls.start({
+              rotate: [0, -1.6, 1.6, -1, 0],
+              scale: [1, 1.02, 1],
+              transition: { duration: 0.7 },
+            });
+          }
+        }, 5000);
+      });
+    };
+
+    startAnimations();
+
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      if (tid) clearTimeout(tid);
+      ctaControls.stop();
+      btnControls.stop();
+    };
+  }, [mounted, ctaControls, btnControls, p.accent]);
 
   return (
     <section className="py-12 sm:py-18 relative overflow-hidden">
@@ -89,19 +115,23 @@ export default function Hero({
         {/* Левый столбец */}
         <motion.div
           initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={{ opacity: mounted ? 1 : 0, y: mounted ? 0 : 14 }}
           transition={{ duration: 0.5 }}
         >
           <h1 className="text-3xl sm:text-5xl font-semibold leading-tight">
-            Кредит до <span style={{ color: p.accent }}>100 млн ₸</span> под
-            ваши цели
+            {t("hero.titlePrefix", { default: "Кредит до " })}
+            <span style={{ color: p.accent }}>100 млн ₸</span>
+            {t("hero.titleSuffix", { default: " под ваши цели" })}
           </h1>
+
           <p
             className="mt-3 sm:mt-5 max-w-xl text-sm sm:text-base"
             style={{ color: theme === "dark" ? "#E8EEF9" : "#41536A" }}
           >
-            Быстрое и понятное оформление. Минимальные ставки и минимум
-            документов. Предварительное решение — в течение 30 минут.
+            {t("hero.subtitle", {
+              default:
+                "Быстрое и понятное оформление. Минимальные ставки и минимум документов. Предварительное решение — в течение 30 минут.",
+            })}
           </p>
 
           <div className="mt-6 flex flex-wrap gap-2">
@@ -115,7 +145,8 @@ export default function Hero({
                     theme === "dark" ? "rgba(255,255,255,0.06)" : p.card,
                 }}
               >
-                <Icon className="h-4 w-4" /> {text}
+                {Icon ? <Icon className="h-4 w-4" /> : null}
+                {text}
               </span>
             ))}
           </div>
@@ -126,19 +157,20 @@ export default function Hero({
               className="inline-flex items-center gap-2 rounded-2xl px-5 py-3 text-sm font-medium shadow-md"
               style={{ background: p.accent, color: accentText }}
             >
-              Получить консультацию <ArrowRight className="h-4 w-4" />
+              {t("buttons.getConsult", { default: "Получить консультацию" })}
+              <ArrowRight className="h-4 w-4" />
             </a>
           </div>
         </motion.div>
-        {/* CTA WhatsApp — заметный */}
+
+        {/* CTA WhatsApp */}
         <motion.div
           id="cta"
           ref={ctaRef}
           initial={{ opacity: 0, y: 24, scale: 0.98 }}
-          animate={ctaControls}
+          animate={mounted ? ctaControls : undefined}
           className="lg:justify-self-end w-full relative"
         >
-          {/* акцентная рамка */}
           <div
             className="rounded-2xl p-[2px] relative"
             style={{
@@ -155,7 +187,7 @@ export default function Hero({
               }}
             >
               <CardContent className="p-5 sm:p-6 space-y-4 relative">
-                {/* Блик-спотлайт: мягко проезжает 1 раз */}
+                {/* блик-спотлайт */}
                 <motion.span
                   aria-hidden="true"
                   initial={{ x: "-120%", opacity: 0 }}
@@ -173,7 +205,7 @@ export default function Hero({
                   className="text-sm font-medium"
                   style={{ color: theme === "dark" ? "#E8EEF9" : "#51637A" }}
                 >
-                  Бесплатная консультация
+                  {t("cta.freeConsult", { default: "Бесплатная консультация" })}
                 </div>
 
                 {/* Переключатели города */}
@@ -193,7 +225,7 @@ export default function Hero({
                       }`,
                     }}
                   >
-                    Шымкент
+                    {t("cities.shymkent", { default: "Шымкент" })}
                   </Button>
                   <Button
                     onClick={() => {
@@ -209,7 +241,7 @@ export default function Hero({
                       }`,
                     }}
                   >
-                    Актау
+                    {t("cities.aktau", { default: "Актау" })}
                   </Button>
                 </div>
 
@@ -218,23 +250,25 @@ export default function Hero({
                   href={waHref}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Написать нам в WhatsApp"
+                  aria-label={t("cta.whatsappAria", {
+                    default: "Написать нам в WhatsApp",
+                  })}
                   className="block rounded-2xl text-center py-3 font-medium focus:outline-none focus:ring-2 focus:ring-offset-2"
                   style={{
-                    background: "#25D366", // ✅ всегда зелёный фон
-                    color: "#ffffff", // ✅ белый текст
-                    border: "1px solid #25D366", // ✅ зелёная обводка
+                    background: "#25D366",
+                    color: "#ffffff",
+                    border: "1px solid #25D366",
                     boxShadow: "0 14px 34px rgba(0,0,0,0.18)",
                   }}
                   whileHover={{ y: -2, scale: 1.01 }}
                   whileTap={{ scale: 0.98 }}
-                  animate={btnControls}
+                  animate={mounted ? btnControls : undefined}
                   onMouseEnter={markInteracted}
                   onClick={markInteracted}
                 >
                   <span className="inline-flex items-center gap-2">
                     <MessageCircle className="h-5 w-5" />
-                    Написать в WhatsApp
+                    {t("cta.whatsapp", { default: "Написать в WhatsApp" })}
                   </span>
                 </motion.a>
 
@@ -242,8 +276,10 @@ export default function Hero({
                   className="text-xs"
                   style={{ color: theme === "dark" ? "#E8EEF9" : "#51637A" }}
                 >
-                  Выберите город и напишите нам — ответим и подскажем
-                  оптимальное решение.
+                  {t("cta.chooseCity", {
+                    default:
+                      "Выберите город и напишите нам — ответим и подскажем оптимальное решение.",
+                  })}
                 </p>
               </CardContent>
             </Card>
