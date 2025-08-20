@@ -39,7 +39,7 @@ import {
 } from "@/components/ui/sheet";
 
 const LOGO_SRC = "/logo.png"; // замените на реальный путь
-const NIGHT = "#242424"; 
+const NIGHT = "#1d1c1c"; 
 
 // —— Цветовые пресеты ——
 const palettes = {
