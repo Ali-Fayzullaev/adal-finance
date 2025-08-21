@@ -8,7 +8,7 @@ import {Menu, Clock, MapPin, Palette as PaletteIcon} from "lucide-react";
 import LocaleSwitcher from "./LocaleSwitcher";
 import type { PaletteKey } from "@/app/theme";
 import logo from "@/public/logo.png";
-
+import LocaleSwitcherWrapper from "./LocaleSwitcherWrapper";
 type Props = {
   t: (k: string, opts?: any) => string;
   p: { border: string; card: string; accent?: string; fg?: string; bg?: string };
@@ -101,7 +101,7 @@ export default function MobileMenu({t, p, theme, setTheme, palettes}: Props) {
 
         {/* переключатель языка */}
         <div className="mt-6 border-t pt-4" style={{borderColor: p.border}}>
-          <LocaleSwitcher p={p} />
+          <LocaleSwitcherWrapper p={p} />
         </div>
 
         {/* переключение темы (палитры) */}
