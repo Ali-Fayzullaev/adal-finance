@@ -1,8 +1,7 @@
 "use client";
 
 import {useLocale} from "next-intl";
-import {useRouter, usePathname} from "@/i18n/navigation"; // из твоего i18n/navigation
-import {useSearchParams} from "next/navigation";
+import {useRouter} from "@/i18n/navigation"; // твой next-intl router
 import {Button} from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -24,17 +23,13 @@ const LOCALES = [
 export default function LocaleSwitcher({p}: Props) {
   const locale = useLocale();
   const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
   const current = LOCALES.find(l => l.code === locale) ?? LOCALES[0];
 
   const switchTo = (target: (typeof LOCALES)[number]["code"]) => {
-    const qs = searchParams.toString();
-    const hash = typeof window !== "undefined" ? window.location.hash : "";
-    const base = qs ? `${pathname}?${qs}` : pathname;
-    // next-intl router: меняем только locale, путь сохраняется
-    router.replace(base + hash, {locale: target});
+    if (typeof window === "undefined") return; // на всякий случай
+    const {pathname, search, hash} = window.location;
+    // сохраняем текущий путь, query и hash, меняем только локаль
+    router.replace(`${pathname}${search ?? ""}${hash ?? ""}`, {locale: target});
   };
 
   return (
