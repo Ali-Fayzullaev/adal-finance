@@ -1,7 +1,8 @@
 "use client";
 
 import {useLocale} from "next-intl";
-import {useRouter} from "@/i18n/navigation"; // твой next-intl router
+import {useRouter, usePathname} from "@/i18n/navigation"; // именно отсюда!
+import {useSearchParams} from "next/navigation";
 import {Button} from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -23,13 +24,28 @@ const LOCALES = [
 export default function LocaleSwitcher({p}: Props) {
   const locale = useLocale();
   const router = useRouter();
+  const pathname = usePathname();            // ← локале-независимый путь (без /ru|/kk)
+  const searchParams = useSearchParams();
+
   const current = LOCALES.find(l => l.code === locale) ?? LOCALES[0];
 
-  const switchTo = (target: (typeof LOCALES)[number]["code"]) => {
-    if (typeof window === "undefined") return; // на всякий случай
-    const {pathname, search, hash} = window.location;
-    // сохраняем текущий путь, query и hash, меняем только локаль
-    router.replace(`${pathname}${search ?? ""}${hash ?? ""}`, {locale: target});
+  const switchTo = (target: typeof LOCALES[number]["code"]) => {
+    // Базовый путь без локали
+    let base = pathname || '/';
+
+    // На всякий случай: если попал путь с локалью (например, из window)
+    if (typeof window !== 'undefined' && !pathname) {
+      const fromWin = window.location.pathname;
+      base = fromWin.replace(/^\/(ru|kk)(?=\/|$)/, '') || '/';
+    }
+
+    const qs = searchParams?.toString();
+    const hash = typeof window !== 'undefined' ? window.location.hash : '';
+
+    const href = (qs ? `${base}?${qs}` : base) + (hash || '');
+
+    // Меняем только локаль – next-intl сам префикснёт /ru или /kk
+    router.replace(href, {locale: target});
   };
 
   return (

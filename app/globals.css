@@ -125,3 +125,8 @@
 .bb {
   border:  2px solid red;
 }
+
+/* Для hover эффектов в навигации */
+a[style*="--hover-bg"]:hover {
+  background-color: var(--hover-bg) !important;
+}
