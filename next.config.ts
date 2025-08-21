@@ -7,7 +7,7 @@ const withNextIntl = nextIntl("./i18n/request.ts");
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
+  // swcMinify: true,
 };
 
 export default withNextIntl(nextConfig);
