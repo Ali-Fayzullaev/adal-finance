@@ -42,7 +42,7 @@ export default async function LocaleLayout({
           t.src=v;s=b.getElementsByTagName(e)[0];
           s.parentNode.insertBefore(t,s)}(window, document,'script',
           'https://connect.facebook.net/en_US/fbevents.js');
-          fbq('init', '749544261116066');
+          fbq('init', '1711051356964284'); // <- ЗДЕСЬ ЗАМЕНИЛИ ID
           fbq('track', 'PageView');
         `}
       </Script>
@@ -51,11 +51,11 @@ export default async function LocaleLayout({
           height="1"
           width="1"
           style={{ display: "none" }}
-          src="https://www.facebook.com/tr?id=749544261116066&ev=PageView&noscript=1"
+          src="https://www.facebook.com/tr?id=1711051356964284&ev=PageView&noscript=1"
         />
       </noscript>
 
-      {/* TikTok Pixel */}
+      {/* TikTok Pixel (оставляем без изменений) */}
       <Script id="tiktok-pixel" strategy="afterInteractive">
         {`
           !function (w, d, t) {

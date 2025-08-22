@@ -1,12 +1,12 @@
-// src/i18n/navigation.ts
-import {createNavigation} from 'next-intl/navigation';
+// i18n/navigation.ts
+import { createSharedPathnamesNavigation } from 'next-intl/navigation';
+import { locales } from '@/i18n';
 
-export const locales = ['ru', 'kk'] as const;
-export const localePrefix = 'always'; // важно
-export const defaultLocale = 'ru';
+export const localePrefix = 'always';
 
-export const {Link, redirect, usePathname, useRouter, getPathname} =
-  createNavigation({
-    locales,
+// УДАЛЯЕМ timeZone и getPathname
+export const { Link, redirect, usePathname, useRouter } =
+  createSharedPathnamesNavigation({
+    locales: locales as unknown as string[],
     localePrefix
   });
