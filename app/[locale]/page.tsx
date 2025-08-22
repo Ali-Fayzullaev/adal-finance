@@ -114,13 +114,14 @@ export default function AdalFinanceLanding() {
 
   const steps = useMemo(
     () => [
-      { Icon: ListChecks, title: t("steps.0.title"), desc: t("steps.0.desc") },
-      { Icon: FileCheck, title: t("steps.1.title"), desc: t("steps.1.desc") },
-      { Icon: Timer, title: t("steps.2.title"), desc: t("steps.2.desc") },
+      { Icon: ListChecks, title: t("steps.0.title"), desc: t("steps.0.desc"),  step: t("steps.0.step") }, 
+      { Icon: FileCheck, title: t("steps.1.title"), desc: t("steps.1.desc"), step: t("steps.1.step")},  
+      { Icon: Timer, title: t("steps.2.title"), desc: t("steps.2.desc"), step: t("steps.2.step") }, 
       {
         Icon: CheckCircle2,
         title: t("steps.3.title"),
         desc: t("steps.3.desc"),
+        step: t("steps.3.step")
       },
     ],
     [t]
@@ -132,87 +133,87 @@ export default function AdalFinanceLanding() {
       style={{ background: p.bg, color: p.fg }}
     >
       {/* Navbar */}
-<header
-  className="sticky top-0 z-40 border-b backdrop-blur"
-  style={{
-    borderColor: p.border,
-    background: theme === "dark" ? NIGHT : "rgba(255,255,255,0.7)",
-  }}
->
-  <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-    <div className="flex items-center justify-between py-3">
-      {/* слева — логотип */}
-      <div className="flex items-center gap-3">
-        <Image
-          src={logo}
-          alt="logo"
-          width={50}
-          height={50}
-          className="h-8 w-8 rounded-full object-cover"
-          style={{ boxShadow: `0 0 0 1px ${p.border}` }}
-        />
-        <span className="text-sm sm:text-base font-semibold tracking-widest">
-          ADAL FINANCE
-        </span>
-      </div>
-
-      {/* справа: на мобилке — язык + гамбургер; на десктопе — язык + навигация + палитры */}
-      <div className="flex items-center gap-2">
-        {/* язык виден на всех экранах */}
-        <LocaleSwitcher p={p} />
-
-        {/* десктопная навигация */}
-        <nav className="hidden md:flex items-center gap-6 text-sm opacity-90">
-          <a href="#services" className="hover:opacity-100">
-            {t("nav.services", { default: "Услуги" })}
-          </a>
-          <a href="#process" className="hover:opacity-100">
-            {t("nav.process", { default: "Как мы работаем" })}
-          </a>
-          <a href="#reviews" className="hover:opacity-100">
-            {t("nav.reviews", { default: "Отзывы" })}
-          </a>
-          <a href="#faq" className="hover:opacity-100">
-            FAQ
-          </a>
-          <a href="#contacts" className="hover:opacity-100">
-            {t("nav.contacts", { default: "Контакты" })}
-          </a>
-
-          {/* палитры только на lg+ */}
-          <div className="hidden lg:flex items-center gap-2">
-            {(Object.keys(palettes) as PaletteKey[]).map((key) => (
-              <button
-                key={key}
-                onClick={() => setTheme(key)}
-                className="h-6 w-6 rounded-full border"
-                style={{
-                  background: palettes[key].bg,
-                  borderColor: p.border,
-                  boxShadow: theme === key ? `0 0 0 2px ${p.accent}` : "none",
-                }}
-                aria-label={palettes[key].name}
-                title={palettes[key].name}
+      <header
+        className="sticky top-0 z-40 border-b backdrop-blur"
+        style={{
+          borderColor: p.border,
+          background: theme === "dark" ? NIGHT : "rgba(255,255,255,0.7)",
+        }}
+      >
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between py-3">
+            {/* слева — логотип */}
+            <div className="flex items-center gap-3">
+              <Image
+                src={logo}
+                alt="logo"
+                width={50}
+                height={50}
+                className="h-8 w-8 rounded-full object-cover"
+                style={{ boxShadow: `0 0 0 1px ${p.border}` }}
               />
-            ))}
+              <span className="text-sm sm:text-base font-semibold tracking-widest">
+                ADAL FINANCE
+              </span>
+            </div>
+
+            {/* справа: на мобилке — язык + гамбургер; на десктопе — язык + навигация + палитры */}
+            <div className="flex items-center gap-2">
+              {/* язык виден на всех экранах */}
+              <LocaleSwitcher p={p} />
+
+              {/* десктопная навигация */}
+              <nav className="hidden md:flex items-center gap-6 text-sm opacity-90">
+                <a href="#services" className="hover:opacity-100">
+                  {t("nav.services", { default: "Услуги" })}
+                </a>
+                <a href="#process" className="hover:opacity-100">
+                  {t("nav.process", { default: "Как мы работаем" })}
+                </a>
+                <a href="#reviews" className="hover:opacity-100">
+                  {t("nav.reviews", { default: "Отзывы" })}
+                </a>
+                <a href="#faq" className="hover:opacity-100">
+                  FAQ
+                </a>
+                <a href="#contacts" className="hover:opacity-100">
+                  {t("nav.contacts", { default: "Контакты" })}
+                </a>
+
+                {/* палитры только на lg+ */}
+                <div className="hidden lg:flex items-center gap-2">
+                  {(Object.keys(palettes) as PaletteKey[]).map((key) => (
+                    <button
+                      key={key}
+                      onClick={() => setTheme(key)}
+                      className="h-6 w-6 rounded-full border"
+                      style={{
+                        background: palettes[key].bg,
+                        borderColor: p.border,
+                        boxShadow:
+                          theme === key ? `0 0 0 2px ${p.accent}` : "none",
+                      }}
+                      aria-label={palettes[key].name}
+                      title={palettes[key].name}
+                    />
+                  ))}
+                </div>
+              </nav>
+
+              {/* мобильное меню (гамбургер) */}
+              <div className="md:hidden">
+                <MobileMenu
+                  t={t}
+                  p={p}
+                  theme={theme}
+                  setTheme={setTheme}
+                  palettes={palettes as any}
+                />
+              </div>
+            </div>
           </div>
-        </nav>
-
-        {/* мобильное меню (гамбургер) */}
-        <div className="md:hidden">
-          <MobileMenu
-            t={t}
-            p={p}
-            theme={theme}
-            setTheme={setTheme}
-            palettes={palettes as any}
-          />
         </div>
-      </div>
-    </div>
-  </div>
-</header>
-
+      </header>
 
       {/* Hero */}
       <Hero
@@ -273,7 +274,7 @@ export default function AdalFinanceLanding() {
             {t("nav.process", { default: "Как мы работаем" })}
           </h2>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {steps.map(({ Icon, title, desc }, i) => (
+            {steps.map(({ Icon, title, desc, step }, i) => (
               <Card
                 key={i}
                 className="rounded-2xl shadow-sm"
@@ -292,7 +293,7 @@ export default function AdalFinanceLanding() {
                     className="mt-3 text-sm uppercase tracking-wide opacity-70"
                     style={{ color: theme === "dark" ? "#E8EEF9" : "#42526D" }}
                   >
-                    Шаг {i + 1}
+                    {step} 
                   </div>
                   <h3
                     className="text-lg font-medium"
@@ -494,7 +495,7 @@ export default function AdalFinanceLanding() {
                       }}
                     />
                     {t("offices.aktau.address", {
-                      default: "14-й микрорайон, БЦ «Каспий», офис 203",
+                      default: "г.Актау 12/59",
                     })}
                   </div>
 
@@ -758,11 +759,24 @@ export default function AdalFinanceLanding() {
                 default: "Ерімбетова 59, Шымкент",
               })}
             </div>
+            <div className="inline-flex items-center gap-2">
+              <MapPin className="h-4 w-4" />{" "}
+              {t("addresses.aktau.short", {
+                default: "г.Актау 12/59",
+              })}
+            </div>
             <a
               href="tel:+77089810031"
               className="inline-flex items-center gap-2 hover:text-blue-500"
             >
-              <Phone className="h-4 w-4" /> +7 708 981 0031
+              <Phone className="h-4 w-4" /> +7 708 981 0031{" "}
+              {t("cities.shymkent")}
+            </a>
+            <a
+              href="tel:+77773058803"
+              className="inline-flex items-center gap-2 hover:text-blue-500"
+            >
+              <Phone className="h-4 w-4" /> +7 777 305 8803 {t("cities.aktau")}
             </a>
             <a
               href="https://www.instagram.com/adal_finance"
