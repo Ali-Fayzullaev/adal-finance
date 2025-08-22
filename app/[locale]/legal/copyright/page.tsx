@@ -12,6 +12,7 @@ import {
 import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
 import type { Locale } from "@/i18n";
+import {setRequestLocale} from 'next-intl/server';
 
 export async function generateMetadata({
   params,
@@ -36,6 +37,7 @@ export default async function CopyrightPage({
     year,
     strong: (chunks) => <span className="font-semibold">{chunks}</span>,
   });
+  setRequestLocale(locale);
   return (
     <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-12">
       {/* Заголовок */}
