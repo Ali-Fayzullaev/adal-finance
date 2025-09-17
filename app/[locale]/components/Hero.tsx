@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, useAnimation } from "framer-motion";
-import { ArrowRight, MessageCircle } from "lucide-react";
+import { ArrowRight, MessageCircle, CircleAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import type { PaletteKey, Palette } from "@/app/theme";
@@ -133,6 +133,30 @@ export default function Hero({
                 "Быстрое и понятное оформление. Минимальные ставки и минимум документов. Предварительное решение — в течение 30 минут.",
             })}
           </p>
+          {/* ELIGIBILITY NOTE (red) */}
+<div className="mt-3 sm:mt-4">
+  <div
+    role="note"
+    aria-live="polite"
+    className="
+      inline-flex items-start gap-2 rounded-xl px-3 py-2
+      text-xs sm:text-sm font-medium
+      border
+      bg-red-50 text-red-700 border-red-200
+      dark:bg-red-900/20 dark:text-red-300 dark:border-red-800/60
+      shadow-sm
+    "
+  >
+    <CircleAlert className="h-4 w-4 mt-0.5 shrink-0" />
+    <span>
+      {t("hero.eligibilityNote", {
+        default:
+          "Услуги доступны при отсутствии просрочек по кредитам и арестов на счетах.",
+      })}
+    </span>
+  </div>
+</div>
+
 
           <div className="mt-6 flex flex-wrap gap-2">
             {badges.map(({ Icon, text }, i) => (
