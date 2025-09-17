@@ -134,11 +134,11 @@ export default function Hero({
             })}
           </p>
           {/* ELIGIBILITY NOTE (red) */}
-<div className="mt-3 sm:mt-4">
-  <div
-    role="note"
-    aria-live="polite"
-    className="
+          <div className="mt-3 sm:mt-4">
+            <div
+              role="note"
+              aria-live="polite"
+              className="
       inline-flex items-start gap-2 rounded-xl px-3 py-2
       text-xs sm:text-sm font-medium
       border
@@ -146,17 +146,16 @@ export default function Hero({
       dark:bg-red-900/20 dark:text-red-300 dark:border-red-800/60
       shadow-sm
     "
-  >
-    <CircleAlert className="h-4 w-4 mt-0.5 shrink-0" />
-    <span>
-      {t("hero.eligibilityNote", {
-        default:
-          "Услуги доступны при отсутствии просрочек по кредитам и арестов на счетах.",
-      })}
-    </span>
-  </div>
-</div>
-
+            >
+              <CircleAlert className="h-4 w-4 mt-0.5 shrink-0" />
+              <span>
+                {t("hero.eligibilityNote", {
+                  default:
+                    "Услуги доступны при отсутствии просрочек по кредитам и арестов на счетах.",
+                })}
+              </span>
+            </div>
+          </div>
 
           <div className="mt-6 flex flex-wrap gap-2">
             {badges.map(({ Icon, text }, i) => (
