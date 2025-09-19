@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, useAnimation } from "framer-motion";
-import { ArrowRight, MessageCircle, CircleAlert } from "lucide-react";
+import { ArrowRight, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import type { PaletteKey, Palette } from "@/app/theme";
@@ -134,7 +134,7 @@ export default function Hero({
             })}
           </p>
           {/* ELIGIBILITY NOTE (red) */}
-          <div className="mt-3 sm:mt-4">
+          {/* <div className="mt-3 sm:mt-4">
             <div
               role="note"
               aria-live="polite"
@@ -155,7 +155,7 @@ export default function Hero({
                 })}
               </span>
             </div>
-          </div>
+          </div> */}
 
           <div className="mt-6 flex flex-wrap gap-2">
             {badges.map(({ Icon, text }, i) => (
