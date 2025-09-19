@@ -192,7 +192,7 @@ export default function Hero({
           ref={ctaRef}
           initial={{ opacity: 0, y: 24, scale: 0.98 }}
           animate={mounted ? ctaControls : undefined}
-          className="lg:justify-self-end w-full relative"
+          className="lg:justify-self-end w-full relative rounded-2xl"
         >
           <div
             className="rounded-2xl p-[2px] relative"
