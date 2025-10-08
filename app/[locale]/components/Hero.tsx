@@ -17,8 +17,8 @@ type Badge = {
 interface HeroProps {
   theme: PaletteKey;
   p: Palette;
-  city: "shymkent" | "aktau";
-  setCity: (c: "shymkent" | "aktau") => void;
+  city: "shymkent" | "aktau" | "atyrau";
+  setCity: (c: "shymkent" | "aktau" | "atyrau") => void;
   waHref: string;
   badges: Badge[];
 }
@@ -31,7 +31,7 @@ export default function Hero({
   waHref,
   badges,
 }: HeroProps) {
-  const t = useTranslations(); // при желании укажи namespace: useTranslations('hero')
+  const t = useTranslations();
   const accentText = theme === "dark" ? "#041E41" : "#ffffff";
 
   const ctaRef = useRef<HTMLDivElement>(null);
@@ -208,7 +208,7 @@ export default function Hero({
                 </div>
 
                 {/* Переключатели города */}
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-3 gap-2">
                   <Button
                     onClick={() => {
                       setCity("shymkent");
@@ -241,6 +241,22 @@ export default function Hero({
                     }}
                   >
                     {t("cities.aktau", { default: "Актау" })}
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      setCity("atyrau");
+                      markInteracted();
+                    }}
+                    className="rounded-xl"
+                    style={{
+                      background: city === "atyrau" ? p.accent : "transparent",
+                      color: city === "atyrau" ? accentText : p.fg,
+                      border: `1px solid ${
+                        city === "atyrau" ? p.accent : p.border
+                      }`,
+                    }}
+                  >
+                    {t("cities.atyrau", { default: "Атырау" })}
                   </Button>
                 </div>
 

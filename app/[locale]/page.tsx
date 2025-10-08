@@ -38,6 +38,7 @@ const NIGHT = "#1d1c1c";
 const WA_NUMBERS = {
   shymkent: "77089810031",
   aktau: "77773058803",
+  atrau: "77027961310",
 };
 
 const makeWaLink = (phone: string, text: string) =>
@@ -47,7 +48,7 @@ export default function AdalFinanceLanding() {
   const t = useTranslations(); // или useTranslations('landing') если у вас namespace
 
   // ===== общий state темы и города =====
-  const [city, setCity] = useState<"shymkent" | "aktau">("shymkent");
+  const [city, setCity] = useState<"shymkent" | "aktau" | "atyrau">("shymkent");
   const [reviewIndex, setReviewIndex] = useState(0);
   const [theme, setTheme] = useState<PaletteKey>("gold");
 
@@ -225,8 +226,6 @@ export default function AdalFinanceLanding() {
         badges={badges}
       />
 
-      {/* ...дальше ваш JSX без изменений, только заголовки можно тоже брать из t(...) */}
-      {/* Services */}
       <section id="services" className="py-14">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl font-semibold">
@@ -314,258 +313,377 @@ export default function AdalFinanceLanding() {
         </div>
       </section>
 
-      {/* Offices / Наши офисы */}
-      <section id="offices" className="py-14">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="flex items-end justify-between gap-4">
-            <h2 className="text-2xl font-semibold">
-              {t("nav.offices", { default: "Наши офисы" })}
-            </h2>
-            <a
-              href="#contacts"
-              className="text-xs hover:opacity-80"
-              style={{ color: p.accent }}
+     {/* Offices / Наши офисы */}
+<section id="offices" className="py-14">
+  <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+    <div className="flex items-end justify-between gap-4">
+      <h2 className="text-2xl font-semibold">
+        {t("nav.offices", { default: "Наши офисы" })}
+      </h2>
+      <a
+        href="#contacts"
+        className="text-xs hover:opacity-80"
+        style={{ color: p.accent }}
+      >
+        {t("nav.contacts", { default: "Контакты" })}
+      </a>
+    </div>
+
+    <div className="mt-6 grid gap-6 lg:grid-cols-3">
+      {/* Шымкент */}
+      <Card
+        className="rounded-2xl shadow-sm overflow-hidden"
+        style={{
+          background:
+            theme === "dark" ? "rgba(255,255,255,0.06)" : p.card,
+          borderColor: p.border,
+        }}
+      >
+        <CardContent className="p-0">
+          <div className="p-5">
+            <div className="flex items-center justify-between">
+              <div
+                className="text-lg font-medium"
+                style={{
+                  color: theme === "dark" ? "#E8EEF9" : "#42526D",
+                }}
+              >
+                {t("cities.shymkent", { default: "Шымкент" })}
+              </div>
+              <span className="inline-flex items-center gap-2 text-xs opacity-80">
+                <Clock
+                  className="h-4 w-4"
+                  style={{
+                    color: theme === "dark" ? "#E8EEF9" : "#42526D",
+                  }}
+                />
+                <span
+                  style={{
+                    color: theme === "dark" ? "#E8EEF9" : "#42526D",
+                  }}
+                >
+                  {t("offices.shymkent.hours", {
+                    default: "Пн–Сб 10:00–19:00",
+                  })}
+                </span>
+              </span>
+            </div>
+
+            <div
+              className="mt-2 inline-flex items-start gap-2 text-sm"
+              style={{ color: theme === "dark" ? "#E8EEF9" : "#42526D" }}
             >
-              {t("nav.contacts", { default: "Контакты" })}
-            </a>
+              <MapPin className="mt-0.5 h-4 w-4" />
+              {t("offices.shymkent.address", {
+                default: "Улица Еримбетова, 59/7, 11 кабинет; 1 этаж",
+              })}
+            </div>
+
+            <div className="mt-4 flex flex-wrap gap-2">
+              <a
+                href="https://2gis.kz/shymkent/inside/70030076950815085/firm/70000001103431806?m=69.633628%2C42.342989%2F18"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm hover:opacity-90"
+                style={{
+                  border: `1px solid ${p.border}`,
+                  background:
+                    theme === "dark" ? "rgba(255,255,255,0.04)" : "#fff",
+                }}
+              >
+                <Navigation
+                  className="h-4 w-4"
+                  style={{
+                    color: theme === "dark" ? "#E8EEF9" : "#42526D",
+                  }}
+                />
+                <span
+                  style={{
+                    color: theme === "dark" ? "#E8EEF9" : "#42526D",
+                  }}
+                >
+                  {t("actions.openMap", { default: "Открыть на карте" })}
+                </span>
+              </a>
+
+              <a
+                href={makeWaLink(WA_NUMBERS.shymkent, waText)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm shadow-sm hover:opacity-90"
+                style={{ background: "#25D366", color: "#fff" }}
+              >
+                <Phone className="h-4 w-4" />{" "}
+                {t("actions.whatsapp", { default: "WhatsApp" })}
+              </a>
+            </div>
           </div>
 
-          <div className="mt-6 grid gap-6 lg:grid-cols-2">
-            {/* Шымкент */}
-            <Card
-              className="rounded-2xl shadow-sm overflow-hidden"
+          {/* Карта Шымкент */}
+          <div
+            className="h-56 w-full border-t"
+            style={{ borderColor: p.border }}
+          >
+            <iframe
+              title={t("titles.mapShymkent", {
+                default: "Карта Шымкент — ADAL Finance",
+              })}
+              src={`https://www.google.com/maps?ll=42.342989,69.633628&hl=${mapLang}&z=16&output=embed`}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="h-full w-full border-0"
               style={{
-                background:
-                  theme === "dark" ? "rgba(255,255,255,0.06)" : p.card,
-                borderColor: p.border,
+                filter:
+                  theme === "dark"
+                    ? "invert(0.9) hue-rotate(180deg) contrast(0.9)"
+                    : "none",
               }}
-            >
-              <CardContent className="p-0">
-                <div className="p-5">
-                  <div className="flex items-center justify-between">
-                    <div
-                      className="text-lg font-medium"
-                      style={{
-                        color: theme === "dark" ? "#E8EEF9" : "#42526D",
-                      }}
-                    >
-                      {t("cities.shymkent", { default: "Шымкент" })}
-                    </div>
-                    <span className="inline-flex items-center gap-2 text-xs opacity-80">
-                      <Clock
-                        className="h-4 w-4"
-                        style={{
-                          color: theme === "dark" ? "#E8EEF9" : "#42526D",
-                        }}
-                      />
-                      <span
-                        style={{
-                          color: theme === "dark" ? "#E8EEF9" : "#42526D",
-                        }}
-                      >
-                        {t("offices.shymkent.hours", {
-                          default: "Пн–Сб 10:00–19:00",
-                        })}
-                      </span>
-                    </span>
-                  </div>
-
-                  <div
-                    className="mt-2 inline-flex items-start gap-2 text-sm"
-                    style={{ color: theme === "dark" ? "#E8EEF9" : "#42526D" }}
-                  >
-                    <MapPin className="mt-0.5 h-4 w-4" />
-                    {t("offices.shymkent.address", {
-                      default: "Улица Еримбетова, 59/7, 11 кабинет; 1 этаж",
-                    })}
-                  </div>
-
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    <a
-                      href="https://2gis.kz/shymkent/inside/70030076950815085/firm/70000001103431806?m=69.633628%2C42.342989%2F18"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm hover:opacity-90"
-                      style={{
-                        border: `1px solid ${p.border}`,
-                        background:
-                          theme === "dark" ? "rgba(255,255,255,0.04)" : "#fff",
-                      }}
-                    >
-                      <Navigation
-                        className="h-4 w-4"
-                        style={{
-                          color: theme === "dark" ? "#E8EEF9" : "#42526D",
-                        }}
-                      />
-                      <span
-                        style={{
-                          color: theme === "dark" ? "#E8EEF9" : "#42526D",
-                        }}
-                      >
-                        {t("actions.openMap", { default: "Открыть на карте" })}
-                      </span>
-                    </a>
-
-                    <a
-                      href={makeWaLink(WA_NUMBERS.shymkent, waText)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm shadow-sm hover:opacity-90"
-                      style={{ background: "#25D366", color: "#fff" }}
-                    >
-                      <Phone className="h-4 w-4" />{" "}
-                      {t("actions.whatsapp", { default: "WhatsApp" })}
-                    </a>
-                  </div>
-                </div>
-
-                {/* Карта Шымкент */}
-                <div
-                  className="h-56 w-full border-t"
-                  style={{ borderColor: p.border }}
-                >
-                  <iframe
-                    title={t("titles.mapShymkent", {
-                      default: "Карта Шымкент — ADAL Finance",
-                    })}
-                    src={`https://www.google.com/maps?ll=42.342989,69.633628&hl=${mapLang}&z=16&output=embed`}
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    className="h-full w-full border-0"
-                    style={{
-                      filter:
-                        theme === "dark"
-                          ? "invert(0.9) hue-rotate(180deg) contrast(0.9)"
-                          : "none",
-                    }}
-                    allowFullScreen
-                  />
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Актау */}
-            <Card
-              className="rounded-2xl shadow-sm overflow-hidden"
-              style={{
-                background:
-                  theme === "dark" ? "rgba(255,255,255,0.06)" : p.card,
-                borderColor: p.border,
-              }}
-            >
-              <CardContent className="p-0">
-                <div className="p-5">
-                  <div className="flex items-center justify-between">
-                    <div
-                      className="text-lg font-medium"
-                      style={{
-                        color: theme === "dark" ? "#E8EEF9" : "#42526D",
-                      }}
-                    >
-                      {t("cities.aktau", { default: "Актау" })}
-                    </div>
-                    <span className="inline-flex items-center gap-2 text-xs opacity-80">
-                      <Clock
-                        className="h-4 w-4"
-                        style={{
-                          color: theme === "dark" ? "#E8EEF9" : "#42526D",
-                        }}
-                      />
-                      <span
-                        style={{
-                          color: theme === "dark" ? "#E8EEF9" : "#42526D",
-                        }}
-                      >
-                        {t("offices.aktau.hours", {
-                          default: "Пн–Сб 10:00–19:00",
-                        })}
-                      </span>
-                    </span>
-                  </div>
-
-                  <div
-                    className="mt-2 inline-flex items-start gap-2 text-sm"
-                    style={{ color: theme === "dark" ? "#E8EEF9" : "#42526D" }}
-                  >
-                    <MapPin
-                      className="mt-0.5 h-4 w-4"
-                      style={{
-                        color: theme === "dark" ? "#E8EEF9" : "#42526D",
-                      }}
-                    />
-                    {t("offices.aktau.address", {
-                      default: "г.Актау 12/59",
-                    })}
-                  </div>
-
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    <a
-                      href="https://www.google.com/maps?q=43.6481,51.1722"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm hover:opacity-90"
-                      style={{
-                        border: `1px solid ${p.border}`,
-                        background:
-                          theme === "dark" ? "rgba(255,255,255,0.04)" : "#fff",
-                      }}
-                    >
-                      <Navigation
-                        className="h-4 w-4"
-                        style={{
-                          color: theme === "dark" ? "#E8EEF9" : "#42526D",
-                        }}
-                      />
-                      <span
-                        style={{
-                          color: theme === "dark" ? "#E8EEF9" : "#42526D",
-                        }}
-                      >
-                        {t("actions.openMap", { default: "Открыть на карте" })}
-                      </span>
-                    </a>
-
-                    <a
-                      href={makeWaLink(WA_NUMBERS.aktau, waText)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm shadow-sm hover:opacity-90"
-                      style={{ background: "#25D366", color: "#fff" }}
-                    >
-                      <Phone className="h-4 w-4" />{" "}
-                      {t("actions.whatsapp", { default: "WhatsApp" })}
-                    </a>
-                  </div>
-                </div>
-
-                {/* Карта Актау */}
-                <div
-                  className="h-56 w-full border-t"
-                  style={{ borderColor: p.border }}
-                >
-                  <iframe
-                    title={t("titles.mapAktau", {
-                      default: "Карта Актау — ADAL Finance",
-                    })}
-                    src={`https://www.google.com/maps?ll=43.6481,51.1722&hl=${mapLang}&z=16&output=embed`}
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    className="h-full w-full border-0"
-                    style={{
-                      filter:
-                        theme === "dark"
-                          ? "invert(0.9) hue-rotate(180deg) contrast(0.9)"
-                          : "none",
-                    }}
-                    allowFullScreen
-                  />
-                </div>
-              </CardContent>
-            </Card>
+              allowFullScreen
+            />
           </div>
-        </div>
-      </section>
+        </CardContent>
+      </Card>
+
+      {/* Актау */}
+      <Card
+        className="rounded-2xl shadow-sm overflow-hidden"
+        style={{
+          background:
+            theme === "dark" ? "rgba(255,255,255,0.06)" : p.card,
+          borderColor: p.border,
+        }}
+      >
+        <CardContent className="p-0">
+          <div className="p-5">
+            <div className="flex items-center justify-between">
+              <div
+                className="text-lg font-medium"
+                style={{
+                  color: theme === "dark" ? "#E8EEF9" : "#42526D",
+                }}
+              >
+                {t("cities.aktau", { default: "Актау" })}
+              </div>
+              <span className="inline-flex items-center gap-2 text-xs opacity-80">
+                <Clock
+                  className="h-4 w-4"
+                  style={{
+                    color: theme === "dark" ? "#E8EEF9" : "#42526D",
+                  }}
+                />
+                <span
+                  style={{
+                    color: theme === "dark" ? "#E8EEF9" : "#42526D",
+                  }}
+                >
+                  {t("offices.aktau.hours", {
+                    default: "Пн–Сб 10:00–19:00",
+                  })}
+                </span>
+              </span>
+            </div>
+
+            <div
+              className="mt-2 inline-flex items-start gap-2 text-sm"
+              style={{ color: theme === "dark" ? "#E8EEF9" : "#42526D" }}
+            >
+              <MapPin
+                className="mt-0.5 h-4 w-4"
+                style={{
+                  color: theme === "dark" ? "#E8EEF9" : "#42526D",
+                }}
+              />
+              {t("offices.aktau.address", {
+                default: "г.Актау 12/59",
+              })}
+            </div>
+
+            <div className="mt-4 flex flex-wrap gap-2">
+              <a
+                href="https://www.google.com/maps?q=43.6481,51.1722"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm hover:opacity-90"
+                style={{
+                  border: `1px solid ${p.border}`,
+                  background:
+                    theme === "dark" ? "rgba(255,255,255,0.04)" : "#fff",
+                }}
+              >
+                <Navigation
+                  className="h-4 w-4"
+                  style={{
+                    color: theme === "dark" ? "#E8EEF9" : "#42526D",
+                  }}
+                />
+                <span
+                  style={{
+                    color: theme === "dark" ? "#E8EEF9" : "#42526D",
+                  }}
+                >
+                  {t("actions.openMap", { default: "Открыть на карте" })}
+                </span>
+              </a>
+
+              <a
+                href={makeWaLink(WA_NUMBERS.aktau, waText)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm shadow-sm hover:opacity-90"
+                style={{ background: "#25D366", color: "#fff" }}
+              >
+                <Phone className="h-4 w-4" />{" "}
+                {t("actions.whatsapp", { default: "WhatsApp" })}
+              </a>
+            </div>
+          </div>
+
+          {/* Карта Актау */}
+          <div
+            className="h-56 w-full border-t"
+            style={{ borderColor: p.border }}
+          >
+            <iframe
+              title={t("titles.mapAktau", {
+                default: "Карта Актау — ADAL Finance",
+              })}
+              src={`https://www.google.com/maps?ll=43.6481,51.1722&hl=${mapLang}&z=16&output=embed`}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="h-full w-full border-0"
+              style={{
+                filter:
+                  theme === "dark"
+                    ? "invert(0.9) hue-rotate(180deg) contrast(0.9)"
+                    : "none",
+              }}
+              allowFullScreen
+            />
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Атырау */}
+      <Card
+        className="rounded-2xl shadow-sm overflow-hidden"
+        style={{
+          background:
+            theme === "dark" ? "rgba(255,255,255,0.06)" : p.card,
+          borderColor: p.border,
+        }}
+      >
+        <CardContent className="p-0">
+          <div className="p-5">
+            <div className="flex items-center justify-between">
+              <div
+                className="text-lg font-medium"
+                style={{
+                  color: theme === "dark" ? "#E8EEF9" : "#42526D",
+                }}
+              >
+                {t("cities.atyrau", { default: "Атырау" })}
+              </div>
+              <span className="inline-flex items-center gap-2 text-xs opacity-80">
+                <Clock
+                  className="h-4 w-4"
+                  style={{
+                    color: theme === "dark" ? "#E8EEF9" : "#42526D",
+                  }}
+                />
+                <span
+                  style={{
+                    color: theme === "dark" ? "#E8EEF9" : "#42526D",
+                  }}
+                >
+                  {t("offices.atyrau.hours", {
+                    default: "Пн–Сб 10:00–19:00",
+                  })}
+                </span>
+              </span>
+            </div>
+
+            <div
+              className="mt-2 inline-flex items-start gap-2 text-sm"
+              style={{ color: theme === "dark" ? "#E8EEF9" : "#42526D" }}
+            >
+              <MapPin
+                className="mt-0.5 h-4 w-4"
+                style={{
+                  color: theme === "dark" ? "#E8EEF9" : "#42526D",
+                }}
+              />
+              {t("offices.atyrau.address", {
+                default: "Уалиханова 10/А, Бизнес центр Диана",
+              })}
+            </div>
+
+            <div className="mt-4 flex flex-wrap gap-2">
+              <a
+                href="https://go.2gis.com/TlGws"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm hover:opacity-90"
+                style={{
+                  border: `1px solid ${p.border}`,
+                  background:
+                    theme === "dark" ? "rgba(255,255,255,0.04)" : "#fff",
+                }}
+              >
+                <Navigation
+                  className="h-4 w-4"
+                  style={{
+                    color: theme === "dark" ? "#E8EEF9" : "#42526D",
+                  }}
+                />
+                <span
+                  style={{
+                    color: theme === "dark" ? "#E8EEF9" : "#42526D",
+                  }}
+                >
+                  {t("actions.openMap", { default: "Открыть на карте" })}
+                </span>
+              </a>
+
+              <a
+                href={makeWaLink("77027961310", waText)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm shadow-sm hover:opacity-90"
+                style={{ background: "#25D366", color: "#fff" }}
+              >
+                <Phone className="h-4 w-4" />{" "}
+                {t("actions.whatsapp", { default: "WhatsApp" })}
+              </a>
+            </div>
+          </div>
+
+          {/* Карта Атырау */}
+          <div
+            className="h-56 w-full border-t"
+            style={{ borderColor: p.border }}
+          >
+            <iframe
+              title={t("titles.mapAtyrau", {
+                default: "Карта Атырау — ADAL Finance",
+              })}
+              src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d21720.914589277847!2d51.86270047745298!3d47.11643095094059!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x41a3c3a07a951467%3A0xea3a59519bce8f3c!2z0JTQuNC90LAg0JDRgtGL0YDQsNGD!5e0!3m2!1sru!2skz!4v1759919705706!5m2!1sru!2skz=${mapLang}&z=16&output=embed`}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              className="h-full w-full border-0"
+              style={{
+                filter:
+                  theme === "dark"
+                    ? "invert(0.9) hue-rotate(180deg) contrast(0.9)"
+                    : "none",
+              }}
+              allowFullScreen
+            />
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  </div>
+</section>
 
       {/* Reviews */}
       <section id="reviews" className="py-14">
@@ -753,18 +871,6 @@ export default function AdalFinanceLanding() {
             <h3 className="font-medium text-base mb-2">
               {t("nav.contacts", { default: "Контакты" })}
             </h3>
-            <div className="inline-flex items-center gap-2">
-              <MapPin className="h-4 w-4" />{" "}
-              {t("addresses.shymkent.short", {
-                default: "Ерімбетова 59, Шымкент",
-              })}
-            </div>
-            <div className="inline-flex items-center gap-2">
-              <MapPin className="h-4 w-4" />{" "}
-              {t("addresses.aktau.short", {
-                default: "г.Актау 12/59",
-              })}
-            </div>
             <a
               href="tel:+77089810031"
               className="inline-flex items-center gap-2 hover:text-blue-500"
@@ -777,6 +883,12 @@ export default function AdalFinanceLanding() {
               className="inline-flex items-center gap-2 hover:text-blue-500"
             >
               <Phone className="h-4 w-4" /> +7 777 305 8803 {t("cities.aktau")}
+            </a>
+            <a
+              href="tel:+77027961310"
+              className="inline-flex items-center gap-2 hover:text-blue-500"
+            >
+              <Phone className="h-4 w-4" /> +7 702 796 1310 {t("cities.atyrau")}
             </a>
             <a
               href="https://www.instagram.com/adal_finance"
@@ -819,6 +931,19 @@ export default function AdalFinanceLanding() {
               )}`}
             </a>
 
+            <a
+              href={makeWaLink(WA_NUMBERS.atrau, waText)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-medium shadow-sm"
+              style={{ background: "#25D366", color: "white" }}
+            >
+              <Phone className="h-4 w-4" />
+              {`${t("actionss.whatsapp", { default: "WhatsApp" })} ${t(
+                "cities.atyrau",
+                { default: "Атырау" }
+              )}`}
+            </a>
             <a
               href={makeWaLink(WA_NUMBERS.aktau, waText)}
               target="_blank"

@@ -103,7 +103,8 @@
   },
   "cities": {
     "shymkent": "Шымкент",
-    "aktau": "Актау"
+    "aktau": "Актау",
+    "atyrau": "Атырау"
   },
   "buttons": {
     "getConsult": "Получить консультацию",
@@ -118,12 +119,17 @@
     "aktau": {
       "hours": "Пн–Сб 10:00–19:00",
       "address": "қ.Актау 12/59"
+    },
+    "atyrau": {
+      "hours": "Пн–Сб 10:00–19:00",
+      "address": "Уалиханова 10/А Бизнес центр Диана"
     }
   },
   "actions": { "openMap": "Открыть на карте", "whatsapp": "WhatsApp" },
   "titles": {
     "mapShymkent": "Карта Шымкент — ADAL Finance",
-    "mapAktau": "Карта Актау — ADAL Finance"
+    "mapAktau": "Карта Актау — ADAL Finance",
+    "mapAtyrau": "Карта Атырау — ADAL Finance"
   },
 
   "company": {
@@ -132,7 +138,8 @@
   },
   "addresses": {
     "shymkent": { "short": "Ерімбетова 59, Шымкент" },
-    "aktau": { "short": "г.Актау 12/59" }
+    "aktau": { "short": "г.Актау 12/59" },
+    "atyrau": { "short": "Уалиханова 10/А Бизнес центр Диана" }
   },
   "actionss": {
     "whatsapp": "WhatsApp"

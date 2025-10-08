@@ -104,7 +104,8 @@
   },
   "cities": {
     "shymkent": "Шымкент",
-    "aktau": "Ақтау"
+    "aktau": "Ақтау",
+    "atyrau": "Атырау"
   },
   "buttons": { "getConsult": "Кеңес алу", "prev": "Алдыңғы", "next": "Келесі" },
   "offices": {
@@ -115,12 +116,17 @@
     "aktau": {
       "hours": "Дс–Сб 10:00–19:00",
       "address": "г.Актау 12/59"
+    },
+    "atyrau": {
+      "hours": "Дс–Сб 10:00–19:00",
+      "address": "Уалиханова 10/А Бизнес центр Диана"
     }
   },
   "actions": { "openMap": "Картадан ашу", "whatsapp": "WhatsApp" },
   "titles": {
     "mapShymkent": "Шымкент картасы — ADAL Finance",
-    "mapAktau": "Ақтау картасы — ADAL Finance"
+    "mapAktau": "Ақтау картасы — ADAL Finance",
+    "mapAtyrau": "Атырау картасы — ADAL Finance"
   },
   "company": {
     "binLabel": "БСН",
@@ -128,7 +134,8 @@
   },
   "addresses": {
     "shymkent": { "short": "Ерімбетова 59, Шымкент" },
-    "aktau": { "short": "қ.Актау 12/59" }
+    "aktau": { "short": "қ.Актау 12/59" },
+    "atyrau": { "short": "Уалиханова 10/А Бизнес центр Диана" }
   },
   "actionss": {
     "whatsapp": "WhatsApp"
