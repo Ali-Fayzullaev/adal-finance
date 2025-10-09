@@ -25,7 +25,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { useTranslations, useLocale } from "next-intl"; // ✅ КЛИЕНТСКИЙ хук
+import { useTranslations, useLocale } from "next-intl"; 
 import Image from "next/image";
 import CopyrightNotice from "@/app/[locale]/components/CopyrightNotice";
 import Hero from "@/app/[locale]/components/Hero";
@@ -41,8 +41,8 @@ const WA_NUMBERS = {
   atrau: "77027961310",
 };
 
-const makeWaLink = (phone: string, text: string) =>
-  `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
+const makeWaLink = (phone: string) =>
+  `https://wa.me/${phone}`;
 
 export default function AdalFinanceLanding() {
   const t = useTranslations(); // или useTranslations('landing') если у вас namespace
@@ -52,15 +52,10 @@ export default function AdalFinanceLanding() {
   const [reviewIndex, setReviewIndex] = useState(0);
   const [theme, setTheme] = useState<PaletteKey>("gold");
 
-  // ✅ локализуем шаблон WhatsApp
-  const waText = t("waText", {
-    default:
-      "Здравствуйте! Хочу получить бесплатную консультацию по ADAL Finance.",
-  });
   const locale = useLocale();
   const mapLang = locale === "kk" ? "kk" : "ru";
   const phone = city === "shymkent" ? WA_NUMBERS.shymkent : WA_NUMBERS.aktau;
-  const waHref = makeWaLink(phone, waText);
+  const waHref = makeWaLink(phone);
 
   const p = useMemo(() => palettes[theme], [theme]);
 
@@ -407,7 +402,7 @@ export default function AdalFinanceLanding() {
               </a>
 
               <a
-                href={makeWaLink(WA_NUMBERS.shymkent, waText)}
+                href={makeWaLink(WA_NUMBERS.shymkent)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm shadow-sm hover:opacity-90"
@@ -526,7 +521,7 @@ export default function AdalFinanceLanding() {
               </a>
 
               <a
-                href={makeWaLink(WA_NUMBERS.aktau, waText)}
+                href={makeWaLink(WA_NUMBERS.aktau)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm shadow-sm hover:opacity-90"
@@ -645,7 +640,7 @@ export default function AdalFinanceLanding() {
               </a>
 
               <a
-                href={makeWaLink("77027961310", waText)}
+                href={makeWaLink("77027961310")}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm shadow-sm hover:opacity-90"
@@ -918,7 +913,7 @@ export default function AdalFinanceLanding() {
             </p>
 
             <a
-              href={makeWaLink(WA_NUMBERS.shymkent, waText)}
+              href={makeWaLink(WA_NUMBERS.shymkent)}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-medium shadow-sm"
@@ -932,7 +927,7 @@ export default function AdalFinanceLanding() {
             </a>
 
             <a
-              href={makeWaLink(WA_NUMBERS.atrau, waText)}
+              href={makeWaLink(WA_NUMBERS.atrau)}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-medium shadow-sm"
@@ -945,7 +940,7 @@ export default function AdalFinanceLanding() {
               )}`}
             </a>
             <a
-              href={makeWaLink(WA_NUMBERS.aktau, waText)}
+              href={makeWaLink(WA_NUMBERS.aktau)}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-medium shadow-sm"
