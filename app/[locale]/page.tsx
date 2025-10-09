@@ -36,7 +36,7 @@ import MobileMenu from "./components/MobileMenu";
 const NIGHT = "#1d1c1c";
 
 const WA_NUMBERS = {
-  shymkent: "77089810031",
+  shymkent: "77081709531",
   aktau: "77773058803",
   atrau: "77027961310",
 };
@@ -867,10 +867,10 @@ export default function AdalFinanceLanding() {
               {t("nav.contacts", { default: "Контакты" })}
             </h3>
             <a
-              href="tel:+77089810031"
+              href="tel:+77081709531"
               className="inline-flex items-center gap-2 hover:text-blue-500"
             >
-              <Phone className="h-4 w-4" /> +7 708 981 0031{" "}
+              <Phone className="h-4 w-4" /> +7 708 170 9531{" "}
               {t("cities.shymkent")}
             </a>
             <a
