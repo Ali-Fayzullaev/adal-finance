@@ -17,8 +17,8 @@ type Badge = {
 interface HeroProps {
   theme: PaletteKey;
   p: Palette;
-  city: "shymkent" | "aktau" | "atyrau";
-  setCity: (c: "shymkent" | "aktau" | "atyrau") => void;
+  city: "shymkent" | "aktau" | "atrau";
+  setCity: (c: "shymkent" | "aktau" | "atrau") => void;
   waHref: string;
   badges: Badge[];
 }
@@ -244,19 +244,19 @@ export default function Hero({
                   </Button>
                   <Button
                     onClick={() => {
-                      setCity("atyrau");
+                      setCity("atrau");
                       markInteracted();
                     }}
                     className="rounded-xl"
                     style={{
-                      background: city === "atyrau" ? p.accent : "transparent",
-                      color: city === "atyrau" ? accentText : p.fg,
+                      background: city === "atrau" ? p.accent : "transparent",
+                      color: city === "atrau" ? accentText : p.fg,
                       border: `1px solid ${
-                        city === "atyrau" ? p.accent : p.border
+                        city === "atrau" ? p.accent : p.border
                       }`,
                     }}
                   >
-                    {t("cities.atyrau", { default: "Атырау" })}
+                    {t("cities.atrau", { default: "Атырау" })}
                   </Button>
                 </div>
 

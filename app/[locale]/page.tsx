@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 import {
   Instagram,
   MessageSquare,
@@ -25,9 +25,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+
 import { useTranslations, useLocale } from "next-intl"; 
 import Image from "next/image";
-import CopyrightNotice from "@/app/[locale]/components/CopyrightNotice";
 import Hero from "@/app/[locale]/components/Hero";
 import { palettes, type PaletteKey } from "../theme";
 import logo from "@/public/logo.png";
@@ -35,6 +35,7 @@ import LocaleSwitcher from "@/app/[locale]/components/LocaleSwitcher";
 import MobileMenu from "./components/MobileMenu";
 const NIGHT = "#1d1c1c";
 import { motion } from "framer-motion";
+import SimpleCopyright from "./components/site/SimpleCopyright";
 const WA_NUMBERS = {
   shymkent: "77081709531",
   aktau: "77773058803",
@@ -45,10 +46,10 @@ const makeWaLink = (phone: string) =>
   `https://wa.me/${phone}`;
 
 export default function AdalFinanceLanding() {
-  const t = useTranslations(); // или useTranslations('landing') если у вас namespace
+  const t = useTranslations();
 
   // ===== общий state темы и города =====
-  const [city, setCity] = useState<"shymkent" | "aktau" | "atyrau">("shymkent");
+  const [city, setCity] = useState<"shymkent" | "aktau" | "atrau">("shymkent");
   const [reviewIndex, setReviewIndex] = useState(0);
   const [theme, setTheme] = useState<PaletteKey>("gold");
 
@@ -155,8 +156,11 @@ export default function AdalFinanceLanding() {
 
             {/* справа: на мобилке — язык + гамбургер; на десктопе — язык + навигация + палитры */}
             <div className="flex items-center gap-2">
+               <Suspense fallback={null}>
+
               {/* язык виден на всех экранах */}
               <LocaleSwitcher p={p} />
+               </Suspense>
 
               {/* десктопная навигация */}
               <nav className="hidden md:flex items-center gap-6 text-sm opacity-90">
@@ -196,6 +200,8 @@ export default function AdalFinanceLanding() {
                 </div>
               </nav>
 
+                 <Suspense fallback={null}>
+
               {/* мобильное меню (гамбургер) */}
               <div className="md:hidden">
                 <MobileMenu
@@ -206,6 +212,7 @@ export default function AdalFinanceLanding() {
                   palettes={palettes as any}
                 />
               </div>
+                 </Suspense>
             </div>
           </div>
         </div>
@@ -576,7 +583,7 @@ export default function AdalFinanceLanding() {
                   color: theme === "dark" ? "#E8EEF9" : "#42526D",
                 }}
               >
-                {t("cities.atyrau", { default: "Атырау" })}
+                {t("cities.atrau", { default: "Атырау" })}
               </div>
               <span className="inline-flex items-center gap-2 text-xs opacity-80">
                 <Clock
@@ -590,7 +597,7 @@ export default function AdalFinanceLanding() {
                     color: theme === "dark" ? "#E8EEF9" : "#42526D",
                   }}
                 >
-                  {t("offices.atyrau.hours", {
+                  {t("offices.atrau.hours", {
                     default: "Пн–Сб 10:00–19:00",
                   })}
                 </span>
@@ -607,7 +614,7 @@ export default function AdalFinanceLanding() {
                   color: theme === "dark" ? "#E8EEF9" : "#42526D",
                 }}
               />
-              {t("offices.atyrau.address", {
+              {t("offices.atrau.address", {
                 default: "Уалиханова 10/А, Бизнес центр Диана",
               })}
             </div>
@@ -883,7 +890,7 @@ export default function AdalFinanceLanding() {
               href="tel:+77027961310"
               className="inline-flex items-center gap-2 hover:text-blue-500"
             >
-              <Phone className="h-4 w-4" /> +7 702 796 1310 {t("cities.atyrau")}
+              <Phone className="h-4 w-4" /> +7 702 796 1310 {t("cities.atrau")}
             </a>
             <a
               href="https://www.instagram.com/adal_finance"
@@ -935,7 +942,7 @@ export default function AdalFinanceLanding() {
             >
               <Phone className="h-4 w-4" />
               {`${t("actionss.whatsapp", { default: "WhatsApp" })} ${t(
-                "cities.atyrau",
+                "cities.atrau",
                 { default: "Атырау" }
               )}`}
             </motion.a>
@@ -954,13 +961,7 @@ export default function AdalFinanceLanding() {
             </motion.a>
           </div>
         </div>
-
-        {/* копирайт */}
-        <CopyrightNotice
-          theme={theme === "dark" ? "dark" : "light"}
-          p={p}
-          autoOnce={false} // ← модалка не откроется сама
-        />
+        <SimpleCopyright/>
       </footer>
     </div>
   );

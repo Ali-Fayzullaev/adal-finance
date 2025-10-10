@@ -1,68 +1,46 @@
-import type { Metadata } from "next";
-import PrintShareBar from "@/app/[locale]/components/PrintShareBar";
-import { Button } from "@/components/ui/button";
+// app/[locale]/legal/copyright/page.tsx
 import {
-  MoveLeft,
   ShieldCheck,
   Ban,
+  BadgeCheck,
   Scale,
   Mail,
-  BadgeCheck,
+  MoveLeft,
 } from "lucide-react";
-import { Link } from "@/i18n/navigation";
-import { getTranslations } from "next-intl/server";
-import type { Locale } from "@/i18n";
-import {setRequestLocale} from 'next-intl/server';
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ locale: Locale }>;
-}): Promise<Metadata> {
-  const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "metaCopyright" });
-  return { title: t("title"), description: t("description") };
-}
-
-export default async function CopyrightPage({
-  params,
-}: {
-  params: Promise<{ locale: Locale }>;
-}) {
-  const { locale } = await params; // 👈 берём локаль из сегмента
-  const t = await getTranslations({ locale, namespace: "copyright" }); // 👈 явно
-
-  const year = new Date().getFullYear();
-  const intro = t.rich("intro", {
-    year,
-    strong: (chunks) => <span className="font-semibold">{chunks}</span>,
-  });
-  setRequestLocale(locale);
+export default  function CopyrightPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-12">
-      {/* Заголовок */}
+      {/* Заголовок + панель печати/шаринга */}
       <div className="flex items-center justify-between gap-3 border-b border-gray-200 dark:border-gray-700 pb-6">
         <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
-          {t("title")}
+          Авторские права
         </h1>
-        <PrintShareBar />
       </div>
 
       {/* Контент */}
       <div className="mt-8 space-y-8 text-gray-700 dark:text-gray-300 leading-relaxed">
         <p className="bg-gradient-to-r from-yellow-50 to-yellow-100 dark:from-yellow-900/40 dark:to-yellow-800/20 p-4 rounded-xl shadow-sm border border-yellow-200 dark:border-yellow-800">
-          {intro}
+          © 2025 ТОО «ADAL Finance». Все права защищены. Материалы сайта
+          (тексты, логотипы, фирменный стиль, фотографии, графика, макеты
+          интерфейсов) охраняются законодательством РК и международными
+          соглашениями об охране авторских и смежных прав.
         </p>
 
         {/* ✅ Разрешённое */}
         <section>
           <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-3 inline-flex items-center gap-2">
             <ShieldCheck className="h-5 w-5" />
-            {t("allowed.title")}
+            Разрешённое использование
           </h2>
           <ul className="list-disc list-inside space-y-2">
-            <li>{t("allowed.items.0")}</li>
-            <li>{t("allowed.items.1")}</li>
+            <li>Персональный просмотр материалов сайта и сохранение ссылок.</li>
+            <li>
+              Цитирование небольших фрагментов при указании активной ссылки на
+              источник.
+            </li>
           </ul>
         </section>
 
@@ -70,12 +48,20 @@ export default async function CopyrightPage({
         <section>
           <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-3 inline-flex items-center gap-2">
             <Ban className="h-5 w-5" />
-            {t("prohibited.title")}
+            Запрещённое использование
           </h2>
           <ul className="list-disc list-inside space-y-2">
-            <li>{t("prohibited.items.0")}</li>
-            <li>{t("prohibited.items.1")}</li>
-            <li>{t("prohibited.items.2")}</li>
+            <li>
+              Копирование, переработка и распространение материалов без
+              письменного согласия правообладателя.
+            </li>
+            <li>
+              Коммерческое использование логотипов, элементов дизайна и текстов
+              без лицензии.
+            </li>
+            <li>
+              Автоматизированное массовое скачивание контента (скрейпинг).
+            </li>
           </ul>
         </section>
 
@@ -83,28 +69,37 @@ export default async function CopyrightPage({
         <section>
           <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-3 inline-flex items-center gap-2">
             <BadgeCheck className="h-5 w-5" />
-            {t("trademarks.title")}
+            Товарные знаки
           </h2>
-          <p>{t("trademarks.text", { brand: "ADAL Finance" })}</p>
+          <p>
+            Наименования и знаки ADAL Finance являются объектами
+            интеллектуальной собственности и могут быть зарегистрированными
+            товарными знаками. Любое использование допускается только с
+            разрешения правообладателя.
+          </p>
         </section>
 
         {/* ⚖️ Ответственность */}
         <section>
           <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-3 inline-flex items-center gap-2">
             <Scale className="h-5 w-5" />
-            {t("liability.title")}
+            Ответственность
           </h2>
-          <p>{t("liability.text")}</p>
+          <p>
+            Информация на сайте носит справочный характер и не является
+            публичной офертой. Компания оставляет за собой право обновлять
+            материалы без предварительного уведомления.
+          </p>
         </section>
 
         {/* 📩 Контакты */}
         <section className="bg-gray-50 dark:bg-gray-800/40 p-5 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
           <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-3 inline-flex items-center gap-2">
             <Mail className="h-5 w-5" />
-            {t("contacts.title")}
+            Контакты правообладателя
           </h2>
           <p>
-            {t("contacts.text")}{" "}
+            По вопросам использования материалов обращайтесь:
             <a
               href="mailto:info@adalfinance.kz"
               className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
@@ -114,12 +109,11 @@ export default async function CopyrightPage({
           </p>
         </section>
 
-        <Link href="/" locale={locale} prefetch className="inline-block">
-          {" "}
-          {/* 👈 фикс */}
+        {/* Кнопка назад */}
+        <Link href="/" prefetch className="inline-block">
           <Button className="bg-black inline-flex items-center gap-2">
             <MoveLeft className="h-4 w-4" />
-            {t("back")}
+            Назад
           </Button>
         </Link>
       </div>
