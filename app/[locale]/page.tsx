@@ -34,7 +34,7 @@ import logo from "@/public/logo.png";
 import LocaleSwitcher from "@/app/[locale]/components/LocaleSwitcher";
 import MobileMenu from "./components/MobileMenu";
 const NIGHT = "#1d1c1c";
-
+import { motion } from "framer-motion";
 const WA_NUMBERS = {
   shymkent: "77081709531",
   aktau: "77773058803",
@@ -401,7 +401,7 @@ export default function AdalFinanceLanding() {
                 </span>
               </a>
 
-              <a
+              <motion.a
                 href={makeWaLink(WA_NUMBERS.shymkent)}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -410,7 +410,7 @@ export default function AdalFinanceLanding() {
               >
                 <Phone className="h-4 w-4" />{" "}
                 {t("actions.whatsapp", { default: "WhatsApp" })}
-              </a>
+              </motion.a>
             </div>
           </div>
 
@@ -520,7 +520,7 @@ export default function AdalFinanceLanding() {
                 </span>
               </a>
 
-              <a
+              <motion.a
                 href={makeWaLink(WA_NUMBERS.aktau)}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -529,7 +529,7 @@ export default function AdalFinanceLanding() {
               >
                 <Phone className="h-4 w-4" />{" "}
                 {t("actions.whatsapp", { default: "WhatsApp" })}
-              </a>
+              </motion.a>
             </div>
           </div>
 
@@ -639,16 +639,16 @@ export default function AdalFinanceLanding() {
                 </span>
               </a>
 
-              <a
-                href={makeWaLink("77027961310")}
+              <motion.a
+                href={makeWaLink(WA_NUMBERS.atrau)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm shadow-sm hover:opacity-90"
+                className="inline-flex bb items-center gap-2 rounded-xl px-3 py-2 text-sm shadow-sm hover:opacity-90"
                 style={{ background: "#25D366", color: "#fff" }}
               >
                 <Phone className="h-4 w-4" />{" "}
                 {t("actions.whatsapp", { default: "WhatsApp" })}
-              </a>
+              </motion.a>
             </div>
           </div>
 
@@ -912,7 +912,7 @@ export default function AdalFinanceLanding() {
               })}
             </p>
 
-            <a
+            <motion.a
               href={makeWaLink(WA_NUMBERS.shymkent)}
               target="_blank"
               rel="noopener noreferrer"
@@ -924,9 +924,9 @@ export default function AdalFinanceLanding() {
                 "cities.shymkent",
                 { default: "Шымкент" }
               )}`}
-            </a>
+            </motion.a>
 
-            <a
+            <motion.a
               href={makeWaLink(WA_NUMBERS.atrau)}
               target="_blank"
               rel="noopener noreferrer"
@@ -938,8 +938,8 @@ export default function AdalFinanceLanding() {
                 "cities.atyrau",
                 { default: "Атырау" }
               )}`}
-            </a>
-            <a
+            </motion.a>
+            <motion.a
               href={makeWaLink(WA_NUMBERS.aktau)}
               target="_blank"
               rel="noopener noreferrer"
@@ -951,7 +951,7 @@ export default function AdalFinanceLanding() {
                 "cities.aktau",
                 { default: "Актау" }
               )}`}
-            </a>
+            </motion.a>
           </div>
         </div>
 

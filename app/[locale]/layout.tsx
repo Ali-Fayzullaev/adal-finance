@@ -4,6 +4,7 @@ import { getMessages, getTranslations } from "next-intl/server";
 import Providers from "./components/Providers";
 import { locales, type Locale } from "@/i18n";
 import Script from "next/script";
+import PixelsTracker from "./components/PixelsTracker";
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -124,7 +125,7 @@ export default async function LocaleLayout({
           window.ttqReady = true;
         }(window, document, 'ttq');`}
       </Script>
-
+      <PixelsTracker />
       {children}
     </Providers>
   );
