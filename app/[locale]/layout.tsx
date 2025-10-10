@@ -1,6 +1,10 @@
 // app/[locale]/layout.tsx
 import type { Metadata } from "next";
-import { getMessages, getTranslations } from "next-intl/server";
+import {
+  getMessages,
+  getTranslations,
+  setRequestLocale,
+} from "next-intl/server";
 import Providers from "./components/Providers";
 import { locales, type Locale } from "@/i18n";
 import Script from "next/script";
@@ -22,13 +26,13 @@ export async function generateMetadata({
 
 export default async function LocaleLayout({
   children,
-  params,
+  params: { locale }, // ← деструктурируем здесь
 }: {
   children: React.ReactNode;
   params: { locale: Locale };
 }) {
-  const { locale } = params;
-  const messages = await getMessages({ locale });
+  setRequestLocale(locale); // ← СНАЧАЛА фиксируем локаль
+  const messages = await getMessages(); // ← потом читаем сообщения
 
   return (
     <Providers locale={locale} messages={messages}>

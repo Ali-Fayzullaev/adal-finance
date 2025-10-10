@@ -2,16 +2,14 @@
 import {getRequestConfig} from 'next-intl/server';
 import {locales, defaultLocale} from '@/i18n';
 
-export default getRequestConfig(async ({locale}) => {
-  // нормализуем локаль (фолбэк на дефолтную)
-  const activeLocale =
-    (locale && (locales as readonly string[]).includes(locale)) ? locale : defaultLocale;
+export default getRequestConfig(async ({requestLocale}) => {
+  const requested = (await requestLocale) ?? defaultLocale;           // ← без ()
+  const activeLocale = (locales as readonly string[]).includes(requested)
+    ? requested
+    : defaultLocale;
 
-  const messages = (await import(`../messages/${activeLocale}.json`)).default;
-
-  // ✅ ВАЖНО: вернуть и locale, и messages
   return {
     locale: activeLocale,
-    messages
+    messages: (await import(`../messages/${activeLocale}.json`)).default
   };
 });
